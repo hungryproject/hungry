@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +18,17 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - asset/
+    - asset/images/
+  fonts:
+    - family: hungryfont
+      fonts:
+        - asset: asset\font\Fraunces_9pt_Soft-Regular.ttf
+        # If you have multiple font weights or styles, declare them like this:
+        - asset: asset\font\Fraunces_9pt_Soft-Bold.ttf
+          weight: 700
+
+    
+
+

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hungry/modules/restuarant/screens/signup_screen.dart';
+import 'package:hungry/modules/restuarant/screens/login_screen.dart';
 
 void main() {
-  runApp(MaterialApp(home: SignupScreen(),));
+  runApp(MaterialApp(
+    theme: ThemeData(fontFamily:"hungryfont" ,
+      
+    ),
+    home: LoginScreen(),));
   }
