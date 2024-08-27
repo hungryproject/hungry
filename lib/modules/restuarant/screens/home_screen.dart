@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:hungry/modules/restuarant/orphanage_detailpage_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<Widget> imagelist = [
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 70),
+            SizedBox(height: 30),
             CarouselSlider(
               options: CarouselOptions(
                 autoPlay: true,
@@ -42,68 +43,84 @@ class HomeScreen extends StatelessWidget {
             const Text(
               'Nearby Orphanages',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(height: 10),
-            Container(
-              height: 250,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 4, // Number of orphanages to display
-                itemBuilder: (context, index) {
-                  // Manually create each orphanage card based on the index
-                  
-
-                  return Container(
-                    width: 200,
-                    margin: EdgeInsets.only(right: 16),
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                            child: Image.asset(
-                              'asset/images/1000_F_263972163_xjqgCRQlDD4azp31qqpcE4okbxDK6pAu.jpg',
-                              height: 120,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 4, // Number of orphanages to display
+                  itemBuilder: (context, index) {
+                    // Manually create each orphanage card based on the index
+                    
+                
+                    return Container(
+                      width: 200,
+                      margin: EdgeInsets.only(right: 16),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,MaterialPageRoute(builder: (context) => OrphanageDetailScreen(
+                            description: 'his is a small description of the details section. Here you can add any relevant information about the item or place that the image represents. This area is perfect for a brief overview or summary.',
+                            location: 'calicut',
+                            manager: 'jhone'
+      ,
+      phone: '12345678',
+      image: 'https://images.pexels.com/photos/933624/pexels-photo-933624.jpeg?auto=compress&cs=tinysrgb&w=600'
+    
+                          ),));
+                        },
+                        child: Card(
+                          color: Colors.white,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Resturent',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                                child: Image.asset(
+                                  'asset/images/1000_F_263972163_xjqgCRQlDD4azp31qqpcE4okbxDK6pAu.jpg',
+                                  height: 120,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
                                 ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'place',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
-                                  ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Resturent',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'place',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ],
