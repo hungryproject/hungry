@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           // Background Image
           Image.asset(
-            'asset/images/images.jpg', // Replace with your image path
+            'asset/images/jhgf.jpg', // Replace with your image path
             fit: BoxFit.cover,
           ),
           // Login Form
@@ -35,10 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CircleAvatar(radius: 100,backgroundImage: AssetImage('asset/eyg.png'),),
+                  CircleAvatar(radius: 100,backgroundImage: AssetImage('asset/images/restu.jpg'),),
                   const Text(
                     'Login',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.lightGreen),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 59, 100, 12)),
                   ),
                   const SizedBox(height: 32.0),
                   // Username Field
@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelText: 'Username',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color.fromARGB(179, 134, 10, 10), // Background color of the input field
+                      fillColor: Color.fromARGB(179, 56, 189, 98), // Background color of the input field
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color.fromARGB(179, 202, 190, 18), // Background color of the input field
+                      fillColor: Color.fromARGB(179, 66, 167, 60), // Background color of the input field
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.push(context, MaterialPageRoute(builder:(context) => SignupScreen(),) );
                    
                     },
-                    child: const Text('Create Account', style: TextStyle(color: Color.fromARGB(255, 224, 29, 166))),
+                    child: const Text('Create Account', style: TextStyle(color: Color.fromARGB(255, 56, 175, 67))),
                   ),
                 ],
               ),

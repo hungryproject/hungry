@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:hungry/modules/restuarant/orphanage_detailpage_screen.dart';
+import 'package:hungry/modules/restuarant/screens/orphanage_detailpage_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<Widget> imagelist = [

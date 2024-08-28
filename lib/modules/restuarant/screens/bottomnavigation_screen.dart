@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/restuarant/screens/home_screen.dart';
+import 'package:hungry/modules/restuarant/screens/order_screen.dart';
+import 'package:hungry/modules/restuarant/screens/profile_screen.dart';
 
 class BottomNavExample extends StatefulWidget {
   @override
@@ -11,8 +13,8 @@ class _BottomNavExampleState extends State<BottomNavExample> {
 
   static  List<Widget> _widgetOptions = <Widget>[
    HomeScreen(),
-    Text('Order Page', style: TextStyle(fontSize: 24)),
-    Text('Profile Page', style: TextStyle(fontSize: 24)),
+  FoodFormPage(),
+  ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
