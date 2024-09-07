@@ -11,7 +11,6 @@ class HomeScreen extends StatelessWidget {
         fit: BoxFit.cover,
       ),
     ),
-    
   ];
 
   @override
@@ -30,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             CarouselSlider(
               options: CarouselOptions(
                 autoPlay: true,
@@ -39,7 +38,7 @@ class HomeScreen extends StatelessWidget {
               ),
               items: imagelist,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             const Text(
               'Nearby Orphanages',
               style: TextStyle(
@@ -47,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -55,23 +54,25 @@ class HomeScreen extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: 4, // Number of orphanages to display
                   itemBuilder: (context, index) {
-                    // Manually create each orphanage card based on the index
-                    
-                
+                   
+
                     return Container(
                       width: 200,
-                      margin: EdgeInsets.only(right: 16),
+                      margin: const EdgeInsets.only(right: 16),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(context,MaterialPageRoute(builder: (context) => OrphanageDetailScreen(
-                            description: 'his is a small description of the details section. Here you can add any relevant information about the item or place that the image represents. This area is perfect for a brief overview or summary.',
-                            location: 'calicut',
-                            manager: 'jhone'
-      ,
-      phone: '12345678',
-      image: 'https://images.pexels.com/photos/933624/pexels-photo-933624.jpeg?auto=compress&cs=tinysrgb&w=600'
-    
-                          ),));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OrphanageDetailScreen(
+                                    description:
+                                        'his is a small description of the details section. Here you can add any relevant information about the item or place that the image represents. This area is perfect for a brief overview or summary.',
+                                    location: 'calicut',
+                                    manager: 'jhone',
+                                    phone: '12345678',
+                                    image:
+                                        'https://images.pLeather, MDF, PET, Acyrlicexels.com/photos/933624/pexels-photo-933624.jpeg?auto=compress&cs=tinysrgb&w=600'),
+                              ));
                         },
                         child: Card(
                           color: Colors.white,
@@ -83,7 +84,8 @@ class HomeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(15)),
                                 child: Image.asset(
                                   'asset/images/1000_F_263972163_xjqgCRQlDD4azp31qqpcE4okbxDK6pAu.jpg',
                                   height: 120,
@@ -96,14 +98,14 @@ class HomeScreen extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Resturent',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       'place',
                                       style: TextStyle(

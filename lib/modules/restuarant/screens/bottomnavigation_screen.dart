@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/restuarant/screens/home_screen.dart';
+import 'package:hungry/modules/restuarant/screens/food_add_screen.dart';
 import 'package:hungry/modules/restuarant/screens/order_screen.dart';
 import 'package:hungry/modules/restuarant/screens/profile_screen.dart';
 
@@ -11,10 +12,12 @@ class BottomNavExample extends StatefulWidget {
 class _BottomNavExampleState extends State<BottomNavExample> {
   int _selectedIndex = 0;
 
-  static  List<Widget> _widgetOptions = <Widget>[
+  final  List<Widget> _widgetOptions = <Widget>[
    HomeScreen(),
+   const OrdersScreen(),
   FoodFormPage(),
-  ProfilePage(),
+
+  const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -37,8 +40,12 @@ class _BottomNavExampleState extends State<BottomNavExample> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.shopping_cart_outlined),
             label: 'Order',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.article_outlined),
+            label: 'food',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -47,6 +54,7 @@ class _BottomNavExampleState extends State<BottomNavExample> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.black,
         onTap: _onItemTapped,
       ),
     );

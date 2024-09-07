@@ -1,8 +1,9 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import for User type
 import 'package:hungry/modules/restuarant/screens/bottomnavigation_screen.dart';
 import 'package:hungry/modules/restuarant/screens/signup_screen.dart';
+
+import '../service/firebase_auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,10 +16,60 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuthService _authService = FirebaseAuthService();
+  bool _isLoading = false; // State to track loading status
+
+  Future<void> _login() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        _isLoading = true; // Show loading indicator
+      });
+
+      final email = _usernameController.text;
+      final password = _passwordController.text;
+
+      try {
+        User? user = await _authService.signInWithEmailAndPassword(email, password);
+        
+        setState(() {
+          _isLoading = false; // Hide loading indicator
+        });
+
+        if (user != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNavExample()),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Welcome, ${user.email}'),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login failed. Please check your credentials.'),
+            ),
+          );
+        }
+      } catch (e) {
+        setState(() {
+          _isLoading = false; // Hide loading indicator
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+          ),
+        );
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -35,24 +86,31 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CircleAvatar(radius: 100,backgroundImage: AssetImage('asset/images/restu.jpg'),),
+                  const CircleAvatar(
+                    radius: 100,
+                    backgroundImage: AssetImage('asset/images/restu.jpg'),
+                  ),
                   const Text(
                     'Login',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 59, 100, 12)),
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 59, 100, 12),
+                    ),
                   ),
                   const SizedBox(height: 32.0),
                   // Username Field
                   TextFormField(
                     controller: _usernameController,
                     decoration: const InputDecoration(
-                      labelText: 'Username',
+                      labelText: 'Email',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color.fromARGB(179, 56, 189, 98), // Background color of the input field
+                      fillColor: Color.fromARGB(179, 56, 189, 98),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your username';
+                        return 'Please enter your email';
                       }
                       return null;
                     },
@@ -66,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color.fromARGB(179, 66, 167, 60), // Background color of the input field
+                      fillColor: Color.fromARGB(179, 66, 167, 60),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -78,29 +136,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 32.0),
                   // Login Button
                   ElevatedButton(
-                    onPressed: () {
-                       Navigator.push(context, MaterialPageRoute(builder:(context) => BottomNavExample(),) );
-                      if (_formKey.currentState?.validate() ?? false) {
-                        final username = _usernameController.text;
-                        final password = _passwordController.text;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Logging in with $username'),
-                          ),
-                        );
-                        // Handle authentication logic here
-                      }
-                    },
-                    child: const Text('Login'),
+                    onPressed: _isLoading ? null : _login, // Disable button if loading
+                    child: _isLoading
+                        ? CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white), // Loading indicator color
+                          )
+                        : const Text('Login'),
                   ),
                   const SizedBox(height: 16.0),
                   // Create Account Button
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder:(context) => SignupScreen(),) );
-                   
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignupScreen()),
+                      );
                     },
-                    child: const Text('Create Account', style: TextStyle(color: Color.fromARGB(255, 56, 175, 67))),
+                    child: const Text(
+                      'Create Account',
+                      style: TextStyle(color: Color.fromARGB(255, 56, 175, 67)),
+                    ),
                   ),
                 ],
               ),
@@ -111,4 +166,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
