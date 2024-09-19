@@ -1,7 +1,7 @@
 import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:hungry/modules/orphanage/screens/orphanagedetails_screen.dart';
+import 'package:hungry/modules/orphanage/screens/restaurant_screen.dart';
 
 class Orphanagehomescreen extends StatefulWidget {
   const Orphanagehomescreen({super.key});
@@ -28,7 +28,7 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
         children: [
           const SizedBox(height: 60),
           const Text(
-            'Give and Donate',
+            'Lend a hand,give a can',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -45,7 +45,7 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
           ),
           const SizedBox(height: 20),
           const Text(
-            'Nearby Orphanages',
+            'Nearby Restaurants',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Restauranrdetailscreen(
+                            builder: (context) => const Restaurantscreen(
                               location: 'calicut',
                               phone: '2425266',
                               description: 'hello',
@@ -104,7 +104,7 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    'Resturent',
+                                    'Restaurant',
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,

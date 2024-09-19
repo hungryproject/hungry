@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (user != null) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => BottomNavExample()),
+            MaterialPageRoute(builder: (context) => RestaurantRootScreen()),
           );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

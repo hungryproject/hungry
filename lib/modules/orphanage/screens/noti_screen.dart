@@ -87,8 +87,11 @@ class NotificationCard extends StatelessWidget {
                     );
                   },
                   child: Text('Accept'),
+                  style: ElevatedButton.styleFrom(
+                  backgroundColor:Colors.green,
+                )
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
                     // Handle reject action

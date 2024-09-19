@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/orphanage/screens/home_screen.dart';
 import 'package:hungry/modules/orphanage/screens/noti_screen.dart';
+import 'package:hungry/modules/orphanage/screens/orderorph_screen.dart';
+import 'package:hungry/modules/orphanage/screens/proffileorph_screen.dart';
 import 'package:hungry/modules/restuarant/screens/home_screen.dart';
 
 
@@ -21,7 +23,9 @@ class _OrphnageRootScreenState extends State<OrphnageRootScreen> {
   List<Widget> pageList = [
     Orphanagehomescreen(),
     NotificationsPage(),
-    Text('profile')
+    RecentOrdersScreen(),
+    Proffileorph()
+    
   ];
 
   @override
@@ -40,6 +44,10 @@ class _OrphnageRootScreenState extends State<OrphnageRootScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            label: 'Order',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

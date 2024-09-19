@@ -4,16 +4,16 @@ import 'package:hungry/modules/restuarant/screens/food_add_screen.dart';
 import 'package:hungry/modules/restuarant/screens/order_screen.dart';
 import 'package:hungry/modules/restuarant/screens/profile_screen.dart';
 
-class BottomNavExample extends StatefulWidget {
+class RestaurantRootScreen extends StatefulWidget {
   @override
-  _BottomNavExampleState createState() => _BottomNavExampleState();
+  _RestaurantRootScreenState createState() => _RestaurantRootScreenState();
 }
 
-class _BottomNavExampleState extends State<BottomNavExample> {
+class _RestaurantRootScreenState extends State<RestaurantRootScreen> {
   int _selectedIndex = 0;
 
   final  List<Widget> _widgetOptions = <Widget>[
-   HomeScreen(),
+   RestaurantHomeScreen(),
    const OrdersScreen(),
   FoodFormPage(),
 

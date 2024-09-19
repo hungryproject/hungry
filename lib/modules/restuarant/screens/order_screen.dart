@@ -32,16 +32,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Orders'),
+        title: const Text('ORDERS'),
       ),
       body: ListView.builder(
         itemCount: orders.length,
         itemBuilder: (context, index) {
           final order = orders[index];
           return AcceptedOrderCard(
-            orphanageName: order['orphanageName']!,
+            orphanageName: order['orphanage Name']!,
             place: order['place']!,
-            foodItem: order['foodItem']!,
+            foodItem: order['food Item']!,
           );
         },
       ),
@@ -114,7 +114,7 @@ class AcceptedOrderCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30.0), // Rounded corners
                   ),
                 ),
-                child: Text('Accept',style: TextStyle(color: Colors.white),),
+                child: Text('Accept',style: TextStyle(color: const Color.fromARGB(255, 108, 135, 111)),),
               ),
             ),
           ],
