@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class OrphanageLoginPage extends StatefulWidget {
   @override
@@ -13,6 +15,22 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+
+  // Variable to store selected image
+  File? _licensePhoto;
+
+  // Image picker instance
+  final ImagePicker _picker = ImagePicker();
+
+  // Function to pick image
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _licensePhoto = File(image.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +113,29 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                   labelText: 'Confirm Password',
                   border: OutlineInputBorder(),
                 ),
+              ),
+              SizedBox(height: 15),
+
+            
+
+              // Display selected image
+              _licensePhoto != null
+                  ? Image.file(
+                      _licensePhoto!,
+                      height: 150,
+                    )
+                  : Container(
+                      height: 150,
+                      width: double.infinity,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.photo, size: 50),
+                    ),
+              SizedBox(height: 10),
+
+              ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: Icon(Icons.upload),
+                label: Text('Upload License'),
               ),
               SizedBox(height: 30),
               

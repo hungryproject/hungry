@@ -28,6 +28,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
     // Add more orders as needed
   ];
 
+  // List of colors to alternate between cards
+  final List<Color> cardColors = [
+    Colors.blue[100]!,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,10 +43,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
         itemCount: orders.length,
         itemBuilder: (context, index) {
           final order = orders[index];
+          final cardColor = cardColors[index % cardColors.length]; // Assign a color based on index
+
           return AcceptedOrderCard(
-            orphanageName: order['orphanage Name']!,
+            orphanageName: order['orphanageName']!,
             place: order['place']!,
-            foodItem: order['food Item']!,
+            foodItem: order['foodItem']!,
+            color: cardColor, // Pass the color to the card
           );
         },
       ),
@@ -53,17 +61,20 @@ class AcceptedOrderCard extends StatelessWidget {
   final String orphanageName;
   final String place;
   final String foodItem;
+  final Color color; // New color parameter
 
   const AcceptedOrderCard({
     Key? key,
     required this.orphanageName,
     required this.place,
     required this.foodItem,
+    required this.color, // Color is required
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: color, // Use the color for the card background
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       elevation: 4,
       child: Padding(
@@ -71,36 +82,36 @@ class AcceptedOrderCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Orphanage:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               orphanageName,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Place:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               place,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Food Item:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               foodItem,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             // Full-width rounded rectangle Accept button
             SizedBox(
               width: double.infinity,
@@ -114,7 +125,10 @@ class AcceptedOrderCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30.0), // Rounded corners
                   ),
                 ),
-                child: Text('Accept',style: TextStyle(color: const Color.fromARGB(255, 108, 135, 111)),),
+                child: const Text(
+                  'Accept',
+                  style: TextStyle(color: Color.fromARGB(255, 8, 8, 8)),
+                ),
               ),
             ),
           ],

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import for User type
 import 'package:hungry/modules/restuarant/screens/bottomnavigation_screen.dart';
 import 'package:hungry/modules/restuarant/screens/signup_screen.dart';
-
 import '../service/firebase_auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,7 +10,6 @@ class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();

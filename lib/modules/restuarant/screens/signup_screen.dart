@@ -147,7 +147,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: ElevatedButton.icon(
                   onPressed: _pickImage,
                   icon: const Icon(Icons.image),
-                  label: const Text('Upload Image'),
+                  label: const Text('Upload License'),
                 ),
               ),
               Padding(

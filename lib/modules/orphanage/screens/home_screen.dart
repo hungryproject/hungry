@@ -15,8 +15,33 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
     ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Image.asset(
-        "asset/images/1000_F_263972163_xjqgCRQlDD4azp31qqpcE4okbxDK6pAu.jpg",
-        fit: BoxFit.cover,
+"asset/images/35-Children-Quotes-3.png",
+fit: BoxFit.cover,
+      ),
+    ),
+  
+
+   ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Image.asset(
+"asset/images/f21da49ea262971b712f49b30f82bf32.jpg",
+   fit: BoxFit.cover,
+      ),
+    ),
+
+    ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Image.asset(
+"asset/images/35-Children-Quotes-6.png",
+   fit: BoxFit.cover,
+      ),
+    ),
+
+    ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Image.asset(
+"asset/images/2.jpg",
+   fit: BoxFit.cover,
       ),
     ),
   ];
@@ -42,6 +67,8 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
               enlargeCenterPage: true,
             ),
             items: imagelist,
+
+            
           ),
           const SizedBox(height: 20),
           const Text(
