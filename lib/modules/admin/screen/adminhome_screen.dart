@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hungry/modules/admin/screen/admprof_screen.dart';
 import 'package:hungry/modules/admin/screen/banner_screen.dart';
 import 'package:hungry/modules/admin/screen/vieworph_screen.dart';
 import 'package:hungry/modules/admin/screen/viewrest_screen.dart';
+import 'package:hungry/modules/restuarant/screens/login_screen.dart';
 
 class AdminPage extends StatelessWidget {
   const AdminPage({super.key});
@@ -15,73 +17,83 @@ class AdminPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              // Handle profile button press
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AdminProfilePage()),
+              );
             },
           ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Handle logout action
               _showLogoutDialog(context);
             },
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Hello, Admin',
-              style: TextStyle(
-                fontSize: 58,
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('asset/images/2L0vC.png'),
+            fit: BoxFit.cover, // Adjusts how the image fits the container
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Hello, Admin',
+                style: TextStyle(
+                  fontSize: 58,
+                  color: Color.fromARGB(255, 251, 251, 250),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 42),
-            Row(
-              children: [
-                Expanded(
-                  child: AdminCard(
-                    title: 'Restaurant',
-                    backgroundColor: Colors.blueAccent,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ViewRestaurantPage()),
-                      );
-                    },
+              const SizedBox(height: 42),
+              Row(
+                children: [
+                  Expanded(
+                    child: AdminCard(
+                      title: 'Restaurant',
+                      backgroundColor: const Color.fromARGB(255, 249, 248, 247).withOpacity(0.7), // Add opacity to the color
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ViewRestaurantPage()),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: AdminCard(
-                    title: 'Orphanage',
-                    backgroundColor: Colors.greenAccent,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Vieworphpage()),
-                      );
-                    },
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: AdminCard(
+                      title: 'Orphanage',
+                      backgroundColor: const Color.fromARGB(255, 247, 249, 248).withOpacity(0.7), // Add opacity to the color
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Vieworphpage()),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 36),
-            AdminCard(
-              title: 'Add Banner',
-              backgroundColor: Colors.orangeAccent,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const BannerAdPage()),
-                );
-              },
-            ),
-          ],
+                ],
+              ),
+              const SizedBox(height: 36),
+              AdminCard(
+                title: 'Add Banner',
+                backgroundColor: const Color.fromARGB(255, 244, 244, 244).withOpacity(0.7), // Add opacity to the color
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BannerAdPage()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -103,9 +115,10 @@ class AdminPage extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // Close the dialog
-              // Add your logout logic here
-              print('User logged out'); // Placeholder for logout action
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
             },
             child: const Text('Logout'),
           ),
@@ -145,7 +158,7 @@ class AdminCard extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Color.fromARGB(255, 237, 103, 14),
               ),
             ),
           ),

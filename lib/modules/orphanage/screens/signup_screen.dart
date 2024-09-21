@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hungry/modules/orphanage/services/OrphanageAuthServices.dart';
+import 'package:hungry/modules/restuarant/service/firebase_auth_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -29,6 +31,15 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
       setState(() {
         _licensePhoto = File(image.path);
       });
+    }
+  }
+
+  void registerhandler() {
+    try {
+      Orphanageauthservices().registerWithEmailAndPassword(emailController.text, confirmPasswordController.text);
+
+    }catch(e){
+
     }
   }
 
@@ -144,9 +155,10 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    registerhandler();
                     // Add your login logic here
                   },
-                  child: Text('Login'),
+                  child: Text('Signup'),
                 ),
               ),
             ],
