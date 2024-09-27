@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hungry/modules/admin/services/banner_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -16,6 +17,8 @@ class _BannerAdPageState extends State<BannerAdPage> {
 
   final ImagePicker _picker = ImagePicker();
 
+  bool  loading =  false;
+
   // Function to pick an image from gallery
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -27,7 +30,12 @@ class _BannerAdPageState extends State<BannerAdPage> {
   }
 
   // Function to submit the form
-  void _submitForm() {
+  void _submitForm() async {
+
+
+    setState(() {
+      loading = true;
+    });
     final String name = _nameController.text;
     final String description = _descriptionController.text;
 
@@ -48,12 +56,17 @@ class _BannerAdPageState extends State<BannerAdPage> {
           ],
         ),
       );
+
+      setState(() {
+        loading = false;
+      });
     } else {
-      // Proceed with submitting data (you can save it or send it to the backend)
-      // For now, we'll just print it
-      print('Banner Name: $name');
-      print('Description: $description');
-      print('Image Path: ${_imageFile!.path}');
+
+      
+     await  BannerServices().addBanner(context: context, imageFile: _imageFile!, title: name, description: description);
+      setState(() {
+        loading = false;
+      });
     }
   }
 
@@ -65,7 +78,7 @@ class _BannerAdPageState extends State<BannerAdPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+        child: loading ?  Center(child: CircularProgressIndicator(),)  : SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -162,28 +175,11 @@ class _BannerAdPageState extends State<BannerAdPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Icon Elevated Button
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: _submitForm,
-                  icon: const Icon(
-                    Icons.done,
-                    size: 24,
-                    color: Color.fromARGB(255, 155, 206, 15),
-                  ),
-                  label: const Text(
-                    'Submit with Icon',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                    backgroundColor: const Color.fromARGB(255, 228, 137, 247),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
+
+
+           
+           
+           
             ],
           ),
         ),

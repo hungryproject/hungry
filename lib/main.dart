@@ -26,6 +26,6 @@ Future<void> main() async {
       fontFamily:"hungryfont" ,
       
     ),
-    home:OrphanageLoginPage(),));
+    home:AdminPage(),),);
   }
  

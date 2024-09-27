@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/admin/screen/admprof_screen.dart';
 import 'package:hungry/modules/admin/screen/banner_screen.dart';
+import 'package:hungry/modules/admin/screen/view_added_banners_screen.dart';
 import 'package:hungry/modules/admin/screen/vieworph_screen.dart';
 import 'package:hungry/modules/admin/screen/viewrest_screen.dart';
 import 'package:hungry/modules/restuarant/screens/login_screen.dart';
@@ -89,6 +90,16 @@ class AdminPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const BannerAdPage()),
+                  );
+                },
+              ),
+              AdminCard(
+                title: 'view  Banners',
+                backgroundColor: const Color.fromARGB(255, 244, 244, 244).withOpacity(0.7), // Add opacity to the color
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  BannerListScreen()),
                   );
                 },
               ),
