@@ -14,6 +14,7 @@ class FirestoreService {
     required String email,
     required String password,
     required String id,
+    required String description,
     required String imageUrl, // New parameter for image URL
   }) async {
     try {
@@ -23,6 +24,7 @@ class FirestoreService {
         'phoneNumber': phoneNumber,
         'email': email,
         'password': password,
+        'description' : description,
         'imageUrl': imageUrl, // Save the image URL
       });
     } catch (e) {

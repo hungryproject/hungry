@@ -20,7 +20,7 @@ class AdminPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AdminProfilePage()),
+                MaterialPageRoute(builder: (context) => const AdminProfilePage()),
               );
             },
           ),
@@ -33,7 +33,7 @@ class AdminPage extends StatelessWidget {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('asset/images/2L0vC.png'),
             fit: BoxFit.cover, // Adjusts how the image fits the container
@@ -128,7 +128,7 @@ class AdminPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             },
             child: const Text('Logout'),
@@ -145,11 +145,11 @@ class AdminCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const AdminCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.backgroundColor,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

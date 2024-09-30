@@ -7,6 +7,8 @@ import 'package:hungry/modules/restuarant/screens/home_screen.dart';
 
 
 class OrphnageRootScreen extends StatefulWidget {
+  const OrphnageRootScreen({super.key});
+
   @override
   _OrphnageRootScreenState createState() => _OrphnageRootScreenState();
 }
@@ -21,10 +23,10 @@ class _OrphnageRootScreenState extends State<OrphnageRootScreen> {
   }
 
   List<Widget> pageList = [
-    Orphanagehomescreen(),
-    NotificationsPage(),
+    const Orphanagehomescreen(),
+    const NotificationsPage(),
     RecentOrdersScreen(),
-    Proffileorph()
+    const Proffileorph()
     
   ];
 

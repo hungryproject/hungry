@@ -4,7 +4,7 @@ import 'package:hungry/modules/restuarant/service/firestorage_serviece.dart';
 import 'package:image_picker/image_picker.dart'; // Import the image_picker package
 import '../service/fire_store_serviece.dart';
 import '../service/firebase_auth_services.dart'; // Import the auth service
-import 'package:firebase_storage/firebase_storage.dart'; // Import Firebase Storage
+// Import Firebase Storage
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -24,6 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController(); // Description field controller
 
   bool _isLoading = false;
   File? _selectedImage;
@@ -39,6 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _descriptionController.dispose(); // Dispose description controller
     super.dispose();
   }
 
@@ -53,68 +55,67 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   // Method to upload image and handle signup
-
   Future<void> _uploadImageAndSignup() async {
-  if (_selectedImage == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please select an image.')),
-    );
-    return;
-  }
+    if (_selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an image.')),
+      );
+      return;
+    }
 
-  setState(() {
-    _isLoading = true; 
-  });
+    setState(() {
+      _isLoading = true;
+    });
 
-  try {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-    String confirmPassword = _confirmPasswordController.text.trim();
+    try {
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+      String confirmPassword = _confirmPasswordController.text.trim();
 
-    if (password == confirmPassword) {
-      var user = await _authService.registerWithEmailAndPassword(email, password);
+      if (password == confirmPassword) {
+        var user = await _authService.registerWithEmailAndPassword(email, password);
 
-      if (user != null) {
-        String? imageUrl = await StorageService().uploadImage(_selectedImage!);
+        if (user != null) {
+          String? imageUrl = await StorageService().uploadImage(_selectedImage!);
 
-        await _firestoreService.addRestaurant(
-          name: _restaurantNameController.text.trim(),
-          place: _placeController.text.trim(),
-          phoneNumber: _numberController.text.trim(),
-          email: email,
-          password: password,
-          id: user.uid,
-          imageUrl: imageUrl!, 
-        );
+          await _firestoreService.addRestaurant(
+            name: _restaurantNameController.text.trim(),
+            place: _placeController.text.trim(),
+            phoneNumber: _numberController.text.trim(),
+            email: email,
+            password: password,
+            id: user.uid,
+            imageUrl: imageUrl!,
+            description: _descriptionController.text.trim(), // Add description field
+          );
 
-        Navigator.pop(context);
+          Navigator.pop(context);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Signup successful!')),
-        );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Signup successful!')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Signup failed. Please try again.')),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Signup failed. Please try again.')),
+          const SnackBar(content: Text('Passwords do not match.')),
         );
       }
-    } else {
+    } catch (e) {
+      // Catch any errors that occur during the process
+      print('Error during signup: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match.')),
+        SnackBar(content: Text('An error occurred: $e')),
       );
+    } finally {
+      setState(() {
+        _isLoading = false; // Stop the loading indicator
+      });
     }
-  } catch (e) {
-    // Catch any errors that occur during the process
-    print('Error during signup: $e');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('An error occurred: $e')),
-    );
-  } finally {
-    setState(() {
-      _isLoading = false; // Stop the loading indicator
-    });
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +182,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-            
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: TextField(
@@ -211,6 +211,17 @@ class _SignupScreenState extends State<SignupScreen> {
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: 'Confirm Password',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: TextField(
+                  controller: _descriptionController,
+                  maxLines: 4,
+                  decoration: const InputDecoration(
+                    labelText: 'Description',
                     border: OutlineInputBorder(),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:flutter/material.dart';
 
 class Restaurantscreen extends StatelessWidget {
@@ -6,6 +7,7 @@ class Restaurantscreen extends StatelessWidget {
   final String manager;
   final String description;
   final String image;
+  final String id;
 
   const Restaurantscreen({
     super.key,
@@ -14,6 +16,7 @@ class Restaurantscreen extends StatelessWidget {
     required this.manager,
     required this.description,
     required this.image,
+    required this.id
   });
 
   @override
@@ -113,7 +116,7 @@ class Restaurantscreen extends StatelessWidget {
                         const SizedBox(height: 16.0),
 
                         // Description
-                        Container(
+                        SizedBox(
                           height: 200, // Limiting height for scrolling behavior
                           child: SingleChildScrollView(
                             child: Text(
@@ -145,8 +148,33 @@ class Restaurantscreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
 
+                         AnimatedRatingStars(
+                                      initialRating: 3.5,
+                                      minRating: 0.0,
+                                      maxRating: 5.0,
+                                      filledColor: Colors.amber,
+                                      emptyColor: Colors.grey,
+                                      filledIcon: Icons.star,
+                                      halfFilledIcon: Icons.star_half,
+                                      emptyIcon: Icons.star_border,
+                                      onChanged: (double rating) {
+                                        
+                                      },
+                                      displayRatingValue: true,
+                                      interactiveTooltips: true,
+                                      customFilledIcon: Icons.star,
+                                      customHalfFilledIcon: Icons.star_half,
+                                      customEmptyIcon: Icons.star_border,
+                                      starSize: 20.0,
+                                      animationDuration: const Duration(milliseconds: 300),
+                                      animationCurve: Curves.easeInOut,
+                                      readOnly: true,
+                                    ),
+
+
+
                         // Submit Button
-                        Container(
+                        SizedBox(
   width: MediaQuery.of(context).size.width, // Full width of the screen
   child: ElevatedButton(
     onPressed: () {

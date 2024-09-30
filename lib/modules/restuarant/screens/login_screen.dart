@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (user != null) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RestaurantRootScreen()),
+            MaterialPageRoute(builder: (context) => const RestaurantRootScreen()),
           );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ElevatedButton(
                     onPressed: _isLoading ? null : _login, // Disable button if loading
                     child: _isLoading
-                        ? CircularProgressIndicator(
+                        ? const CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white), // Loading indicator color
                           )
                         : const Text('Login'),

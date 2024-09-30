@@ -5,6 +5,8 @@ import 'package:hungry/modules/restuarant/screens/order_screen.dart';
 import 'package:hungry/modules/restuarant/screens/profile_screen.dart';
 
 class RestaurantRootScreen extends StatefulWidget {
+  const RestaurantRootScreen({super.key});
+
   @override
   _RestaurantRootScreenState createState() => _RestaurantRootScreenState();
 }
@@ -15,7 +17,7 @@ class _RestaurantRootScreenState extends State<RestaurantRootScreen> {
   final  List<Widget> _widgetOptions = <Widget>[
    RestaurantHomeScreen(),
    const OrdersScreen(),
-  FoodFormPage(),
+  const FoodFormPage(),
 
   const ProfilePage(),
   ];

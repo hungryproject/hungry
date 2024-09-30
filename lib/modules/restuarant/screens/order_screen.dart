@@ -64,12 +64,12 @@ class AcceptedOrderCard extends StatelessWidget {
   final Color color; // New color parameter
 
   const AcceptedOrderCard({
-    Key? key,
+    super.key,
     required this.orphanageName,
     required this.place,
     required this.foodItem,
     required this.color, // Color is required
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

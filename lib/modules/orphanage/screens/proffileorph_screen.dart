@@ -9,7 +9,7 @@ class Proffileorph extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Orphanage Profile'),
+        title: const Text('Orphanage Profile'),
         backgroundColor: Colors.blueAccent,
       ),
       body: SingleChildScrollView(
@@ -21,9 +21,9 @@ class Proffileorph extends StatelessWidget {
               
 
               // Orphanage Name
-              Text(
+              const Text(
                 'DRE orphanage',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -31,39 +31,39 @@ class Proffileorph extends StatelessWidget {
               const SizedBox(height: 8.0),
 
               // Place
-              Row(
+              const Row(
                 children: [
-                  const Icon(Icons.location_on, color: Colors.red),
-                  const SizedBox(width: 8.0),
+                  Icon(Icons.location_on, color: Colors.red),
+                  SizedBox(width: 8.0),
                   Text(
                     'othaloor',
-                    style: const TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
               const SizedBox(height: 16.0),
 
               // Mail ID
-              Row(
+              const Row(
                 children: [
-                  const Icon(Icons.email, color: Colors.blue),
-                  const SizedBox(width: 8.0),
+                  Icon(Icons.email, color: Colors.blue),
+                  SizedBox(width: 8.0),
                   Text(
                     'pthdm1234',
-                    style: const TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
               const SizedBox(height: 16.0),
 
               // Phone Number
-              Row(
+              const Row(
                 children: [
-                  const Icon(Icons.phone, color: Colors.green),
-                  const SizedBox(width: 8.0),
+                  Icon(Icons.phone, color: Colors.green),
+                  SizedBox(width: 8.0),
                   Text(
                     '79078',
-                    style: const TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
@@ -101,14 +101,14 @@ class Proffileorph extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8.0),
-              Row(
+              const Row(
                 children: [
-                  const Icon(Icons.map, color: Colors.orange),
-                  const SizedBox(width: 8.0),
+                  Icon(Icons.map, color: Colors.orange),
+                  SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
                       'ptb',
-                      style: const TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                 ],

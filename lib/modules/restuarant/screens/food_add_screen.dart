@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../service/fire_store_serviece.dart'; // Adjust import path as necessary
 
 class FoodFormPage extends StatefulWidget {
+  const FoodFormPage({super.key});
+
   @override
   _FoodFormPageState createState() => _FoodFormPageState();
 }
@@ -24,34 +26,34 @@ class _FoodFormPageState extends State<FoodFormPage> {
         child: ListView(
           children: [
             // Form for Food Details
-            Text(
+            const Text(
               'ENTER FOOD DETAILS',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: _foodNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Food Name',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: _quantityController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Quantity',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _timeController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Time Available Until',
                       border: OutlineInputBorder(),
                     ),
@@ -62,49 +64,49 @@ class _FoodFormPageState extends State<FoodFormPage> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.access_time),
+                  icon: const Icon(Icons.access_time),
                   onPressed: () {
                     _selectTime(context);
                   },
                 ),
               ],
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             // Display loading indicator or button based on loading state
             _isLoading
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : ElevatedButton(
                     onPressed: _submitForm,
-                    child: Text(
-                      'OK',
-                      style: TextStyle(color: Colors.white),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green, // Background color
                     ),
+                    child: const Text(
+                      'OK',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             // Recent Orders Title
-            Text(
+            const Text(
               'RECENT FOODS',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             // StreamBuilder to display pending orders
             StreamBuilder<QuerySnapshot>(
               stream: _firestoreService.getPendingOrders(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text('Error fetching orders: ${snapshot.error}'),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('No pending orders.'));
+                  return const Center(child: Text('No pending orders.'));
                 } else {
                   final orders = snapshot.data!.docs;
                   return Column(
@@ -158,7 +160,7 @@ class _FoodFormPageState extends State<FoodFormPage> {
     if (foodName.isEmpty || quantity <= 0 || timeAvailable.isEmpty) {
       // Show error message if inputs are not valid
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill out all fields correctly.')),
+        const SnackBar(content: Text('Please fill out all fields correctly.')),
       );
       // Set loading state to false
       setState(() {
@@ -179,7 +181,7 @@ class _FoodFormPageState extends State<FoodFormPage> {
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Order added successfully!')),
+        const SnackBar(content: Text('Order added successfully!')),
       );
 
       // Clear the form fields
@@ -208,7 +210,7 @@ class AcceptedOrderCard extends StatelessWidget {
   final String date;
   final VoidCallback onAccept;
 
-  AcceptedOrderCard({
+  const AcceptedOrderCard({super.key, 
     required this.Name,
     required this.quantity,
     required this.availableUntil,
@@ -228,22 +230,22 @@ class AcceptedOrderCard extends StatelessWidget {
           children: [
             Text(
               'Name: $Name',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Quantity: $quantity',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Available Until: $availableUntil',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Date: $date',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
            
           ],

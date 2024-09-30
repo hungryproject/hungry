@@ -78,7 +78,7 @@ class _BannerAdPageState extends State<BannerAdPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: loading ?  Center(child: CircularProgressIndicator(),)  : SingleChildScrollView(
+        child: loading ?  const Center(child: CircularProgressIndicator(),)  : SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

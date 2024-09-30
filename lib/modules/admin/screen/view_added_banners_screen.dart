@@ -6,6 +6,8 @@ import '../services/banner_services.dart';
 class BannerListScreen extends StatelessWidget {
   final BannerServices _bannerServices = BannerServices();
 
+  BannerListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +39,7 @@ class BannerListScreen extends StatelessWidget {
 
               return Card(
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Colors.grey, width: 1),
+                  side: const BorderSide(color: Colors.grey, width: 1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: ListTile(
@@ -51,13 +53,13 @@ class BannerListScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
                           // Update functionality can be added here
                         },
                       ),
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () {
                           _bannerServices.deleteBanner(
                             context: context,
@@ -83,7 +85,7 @@ class BannerListScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           contentPadding: EdgeInsets.zero,
-          content: Container(
+          content: SizedBox(
             width: double.maxFinite,
             child: Image.network(imageUrl, fit: BoxFit.cover),
           ),

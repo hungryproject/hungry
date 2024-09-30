@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AdminProfilePage extends StatefulWidget {
+  const AdminProfilePage({super.key});
+
   @override
   _AdminProfilePageState createState() => _AdminProfilePageState();
 }
@@ -20,7 +22,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Profile'),
+        title: const Text('Admin Profile'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,7 +33,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
               // Admin Name Field
               TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Admin Name',
                   border: OutlineInputBorder(),
                 ),
@@ -42,12 +44,12 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Place Field
               TextFormField(
                 controller: placeController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Place',
                   border: OutlineInputBorder(),
                 ),
@@ -58,12 +60,12 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Phone Number Field
               TextFormField(
                 controller: phoneController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Phone Number',
                   border: OutlineInputBorder(),
                 ),
@@ -77,12 +79,12 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Email Field
               TextFormField(
                 controller: emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
@@ -96,12 +98,12 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Password Field
               TextFormField(
                 controller: passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
@@ -113,12 +115,12 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Confirm Password Field
               TextFormField(
                 controller: confirmPasswordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Confirm Password',
                   border: OutlineInputBorder(),
                 ),
@@ -132,7 +134,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   return null;
                 },
               ),
-              SizedBox(height: 32.0),
+              const SizedBox(height: 32.0),
 
               // Submit Button
               ElevatedButton(
@@ -140,12 +142,12 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   if (_formKey.currentState!.validate()) {
                     // Form is valid, proceed with submission
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Profile Submitted Successfully')),
+                      const SnackBar(content: Text('Profile Submitted Successfully')),
                     );
                     // Handle form submission logic
                   }
                 },
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

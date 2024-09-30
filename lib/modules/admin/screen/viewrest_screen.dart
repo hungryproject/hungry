@@ -37,7 +37,7 @@ class AcceptedTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16.0),
-      children: [
+      children: const [
         RestaurantCard(
           restaurantName: 'Pizza Palace',
           location: 'Main Street',
@@ -113,7 +113,7 @@ class RestaurantCard extends StatelessWidget {
   final VoidCallback? onDecline;
 
   const RestaurantCard({
-    Key? key,
+    super.key,
     required this.restaurantName,
     required this.location,
     required this.phoneNumber,
@@ -122,7 +122,7 @@ class RestaurantCard extends StatelessWidget {
     this.showButtons = false, // Default to no buttons
     this.onAccept,
     this.onDecline,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

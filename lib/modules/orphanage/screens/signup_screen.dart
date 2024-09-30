@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/orphanage/services/OrphanageAuthServices.dart';
-import 'package:hungry/modules/restuarant/service/firebase_auth_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class OrphanageLoginPage extends StatefulWidget {
+  const OrphanageLoginPage({super.key});
+
   @override
   _OrphanageLoginPageState createState() => _OrphanageLoginPageState();
 }
@@ -52,7 +53,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Center(
+              const Center(
                 child: Text(
                   'Login',
                   style: TextStyle(
@@ -61,71 +62,71 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               
               // Orphanage Name
               TextField(
                 controller: orphanageNameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Orphanage Name',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               
               // Place
               TextField(
                 controller: placeController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Place',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               
               // Number
               TextField(
                 controller: numberController,
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Phone Number',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               
               // Email ID
               TextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email ID',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               
               // Password
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               
               // Confirm Password
               TextField(
                 controller: confirmPasswordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Confirm Password',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
             
 
@@ -139,16 +140,16 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                       height: 150,
                       width: double.infinity,
                       color: Colors.grey[300],
-                      child: Icon(Icons.photo, size: 50),
+                      child: const Icon(Icons.photo, size: 50),
                     ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
               ElevatedButton.icon(
                 onPressed: _pickImage,
-                icon: Icon(Icons.upload),
-                label: Text('Upload License'),
+                icon: const Icon(Icons.upload),
+                label: const Text('Upload License'),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               
               // Login Button
               SizedBox(
@@ -158,7 +159,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                     registerhandler();
                     // Add your login logic here
                   },
-                  child: Text('Signup'),
+                  child: const Text('Signup'),
                 ),
               ),
             ],

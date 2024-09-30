@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/restuarant/screens/edit_profile_screen.dart';
 import 'package:hungry/modules/restuarant/screens/login_screen.dart';
@@ -26,9 +25,9 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _fetchRestaurantDetails() async {
     FirestoreService firestoreService = FirestoreService();
 
-    FirebaseAuthService _auth = FirebaseAuthService();
+    FirebaseAuthService auth = FirebaseAuthService();
 
-     id =  _auth.getCurrentUser()?.uid;
+     id =  auth.getCurrentUser()?.uid;
 
     Map<String, dynamic>?  details = await firestoreService.getRestaurantById(id??'');
 
@@ -44,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       await FirebaseAuthService().signOut();
 
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen(),), 
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen(),), 
       (route) => false,);
   
     } catch (e) {
@@ -72,9 +71,9 @@ class _ProfilePageState extends State<ProfilePage> {
               },);
               
             },
-            child: Icon(Icons.edit)),
+            child: const Icon(Icons.edit)),
 
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
           IconButton(
             icon: const Icon(Icons.logout,color: Colors.red,),
             onPressed: _logout,
@@ -118,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
-                      Container(
+                      SizedBox(
                         height: 200,
                         child: ListView(
                           scrollDirection: Axis.horizontal,

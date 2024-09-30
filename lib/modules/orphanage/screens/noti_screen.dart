@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class NotificationsPage extends StatelessWidget {
+  const NotificationsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: const Text('Notifications'),
       ),
       body: ListView(
-        padding: EdgeInsets.all(10),
-        children: <Widget>[
+        padding: const EdgeInsets.all(10),
+        children: const <Widget>[
           NotificationCard(
             restaurantName: 'The Italian Bistro',
             place: 'Downtown',
@@ -41,7 +43,7 @@ class NotificationCard extends StatelessWidget {
   final String foodItem;
   final int quantity;
 
-  NotificationCard({
+  const NotificationCard({super.key, 
     required this.restaurantName,
     required this.place,
     required this.foodItem,
@@ -52,30 +54,30 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Padding(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               restaurantName,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(
               place,
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               'Food Item: $foodItem',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
             Text(
               'Quantity: $quantity',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -83,26 +85,26 @@ class NotificationCard extends StatelessWidget {
                   onPressed: () {
                     // Handle accept action
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Accepted')),
+                      const SnackBar(content: Text('Accepted')),
                     );
                   },
-                  child: Text('Accept'),
                   style: ElevatedButton.styleFrom(
                   backgroundColor:Colors.green,
-                )
+                ),
+                  child: const Text('Accept')
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
                     // Handle reject action
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Rejected')),
+                      const SnackBar(content: Text('Rejected')),
                     );
                   },
-                  child: Text('Reject'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
+                  child: const Text('Reject'),
                 ),
               ],
             ),
