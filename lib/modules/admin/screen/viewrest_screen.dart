@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ViewRestaurantPage extends StatelessWidget {
@@ -35,27 +36,36 @@ class AcceptedTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16.0),
-      children: const [
-        RestaurantCard(
-          restaurantName: 'Pizza Palace',
-          location: 'Main Street',
-          phoneNumber: '123-456-7890',
-          email: 'contact@pizzapalace.com',
-          licenseImage: 'asset/images/hi.png', // Example image path
-          showButtons: false, // Hide buttons in Accepted tab
-        ),
-        RestaurantCard(
-          restaurantName: 'Burger Town',
-          location: 'Broadway',
-          phoneNumber: '987-654-3210',
-          email: 'info@burgertown.com',
-          licenseImage: 'asset/images/hi.png', // Example image path
-          showButtons: false, // Hide buttons in Accepted tab
-        ),
-        // Add more accepted restaurants as needed
-      ],
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('restaurants')
+          .where('isAccepted', isEqualTo: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text('Error loading data'));
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final restaurants = snapshot.data!.docs;
+
+        return restaurants.isEmpty ? Center(child: Text('No Resturents registerd yet'),)  :ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: restaurants.length,
+          itemBuilder: (context, index) {
+            final data = restaurants[index].data() as Map<String, dynamic>;
+            return   RestaurantCard(
+              restaurantName: data['name'],
+              location: data['place'],
+              phoneNumber: data['phoneNumber'],
+              email: data['email'],
+              licenseImage: data['imageUrl'],
+              showButtons: false);
+          },
+        );
+      },
     );
   }
 }
@@ -65,39 +75,51 @@ class PendingTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16.0),
-      children: [
-        RestaurantCard(
-          restaurantName: 'Sushi Hub',
-          location: 'Downtown',
-          phoneNumber: '555-123-4567',
-          email: 'sushi@hub.com',
-          licenseImage: null, // No image provided, use placeholder
-          showButtons: true, // Show buttons in Pending tab
-          onAccept: () {
-            // Handle accepted
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('restaurants')
+          .where('isAccepted', isEqualTo: false)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text('Error loading data'));
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final restaurants = snapshot.data!.docs;
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: restaurants.length,
+          itemBuilder: (context, index) {
+            final data = restaurants[index].data() as Map<String, dynamic>;
+            return RestaurantCard(
+              restaurantName: data['name'],
+              location: data['place'],
+              phoneNumber: data['phoneNumber'],
+              email: data['email'],
+              licenseImage: data['imageUrl'],
+              showButtons: true,
+              onAccept: () {
+                // Update Firestore to set the restaurant as accepted
+                FirebaseFirestore.instance
+                    .collection('restaurants')
+                    .doc(restaurants[index].id)
+                    .update({'isAccepted': true});
+              },
+              onDecline: () {
+                // Handle restaurant decline, for example, deleting from the collection
+                FirebaseFirestore.instance
+                    .collection('restaurants')
+                    .doc(restaurants[index].id)
+                    .delete();
+              },
+            );
           },
-          onDecline: () {
-            // Handle declined
-          },
-        ),
-        RestaurantCard(
-          restaurantName: 'Pasta Heaven',
-          location: 'Riverside',
-          phoneNumber: '321-987-6543',
-          email: 'pasta@heaven.com',
-          licenseImage: 'asset/images/hi.png', // Example image path
-          showButtons: true, // Show buttons in Pending tab
-          onAccept: () {
-            // Handle accepted
-          },
-          onDecline: () {
-            // Handle declined
-          },
-        ),
-        // Add more pending restaurants as needed
-      ],
+        );
+      },
     );
   }
 }
@@ -157,25 +179,32 @@ class RestaurantCard extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
-            // Display the license image or a placeholder if no image is provided
-            licenseImage != null
-                ? Image.asset(
-                    licenseImage!,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  )
-                : Container(
-                    height: 150,
-                    color: Colors.grey[300],
-                    child: const Center(
-                      child: Text(
-                        'No License Image',
-                        style: TextStyle(fontSize: 16),
+            GestureDetector(
+              onTap: () {
+                if (licenseImage != null) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => FullScreenImage(imagePath: licenseImage!),
+                  ));
+                }
+              },
+              child: licenseImage != null
+                  ? Image.network(
+                      licenseImage!,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      height: 150,
+                      color: Colors.grey[300],
+                      child: const Center(
+                        child: Text(
+                          'No License Image',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ),
-                  ),
+            ),
             const SizedBox(height: 16),
-            // Show buttons only if showButtons is true (only for Pending tab)
             if (showButtons)
               Row(
                 children: [
@@ -203,6 +232,30 @@ class RestaurantCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class FullScreenImage extends StatelessWidget {
+  final String imagePath;
+
+  const FullScreenImage({super.key, required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('License Image'),
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: Center(
+        child: Image.network(imagePath, fit: BoxFit.contain),
+      ),
+      backgroundColor: Colors.black,
     );
   }
 }

@@ -86,6 +86,7 @@ class _SignupScreenState extends State<SignupScreen> {
             password: password,
             id: user.uid,
             imageUrl: imageUrl!,
+            
             description: _descriptionController.text.trim(), // Add description field
           );
 

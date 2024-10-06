@@ -1,22 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/orphanage/services/OrphanageAuthServices.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class OrphanageLoginPage extends StatefulWidget {
-  const OrphanageLoginPage({super.key});
-
   @override
-  _OrphanageLoginPageState createState() => _OrphanageLoginPageState();
+  State<OrphanageLoginPage> createState() => _OrphanageLoginPageState();
 }
 
 class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
   // Controllers to get text input
   final TextEditingController orphanageNameController = TextEditingController();
+
   final TextEditingController placeController = TextEditingController();
+
   final TextEditingController numberController = TextEditingController();
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController confirmPasswordController = TextEditingController();
 
   // Variable to store selected image
@@ -24,6 +28,9 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
 
   // Image picker instance
   final ImagePicker _picker = ImagePicker();
+
+  // Loading state
+  bool isLoading = false;
 
   // Function to pick image
   Future<void> _pickImage() async {
@@ -35,12 +42,41 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
     }
   }
 
-  void registerhandler() {
+  void registerHandler() async {
+    if (_licensePhoto == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please upload a license photo')),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
     try {
-      Orphanageauthservices().registerWithEmailAndPassword(emailController.text, confirmPasswordController.text);
+      await OrphanageAuthServices().registerWithEmailAndPassword(
+        email: emailController.text,
+        password: confirmPasswordController.text,
+        orphanageName: orphanageNameController.text,
+        place: placeController.text,
+        phoneNumber: numberController.text,
+        licensePhotoUrl: _licensePhoto!,
+      );
 
-    }catch(e){
-
+      Navigator.pop(context);
+      // Handle successful registration, e.g., navigate to another screen
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Handle error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     }
   }
 
@@ -127,9 +163,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 ),
               ),
               const SizedBox(height: 15),
-
-            
-
+              
               // Display selected image
               _licensePhoto != null
                   ? Image.file(
@@ -151,15 +185,20 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
               ),
               const SizedBox(height: 30),
               
-              // Login Button
+              // Signup Button with loading state
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    registerhandler();
-                    // Add your login logic here
-                  },
-                  child: const Text('Signup'),
+                  onPressed: isLoading
+                      ? null // Disable button when loading
+                      : () {
+                          registerHandler();
+                        },
+                  child: isLoading
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text('Signup'),
                 ),
               ),
             ],

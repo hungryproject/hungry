@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Vieworphpage extends StatelessWidget {
@@ -35,27 +36,38 @@ class AcceptedTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16.0),
-      children: const [
-        OrphanageCard(
-         orphanageName: 'orphanange Palace',
-          location: 'Main Street',
-          phoneNumber: '123-456-7890',
-          email: 'contact@pizzapalace.com',
-          licenseImage: 'asset/images/hi.png', // Example image path
-          showButtons: false, // Hide buttons in Accepted tab
-        ),
-        OrphanageCard(
-          orphanageName: 'heavens home',
-          location: 'Broadway',
-          phoneNumber: '987-654-3210',
-          email: 'info@burgertown.com',
-          licenseImage: 'asset/images/hi.png', // Example image path
-          showButtons: false, // Hide buttons in Accepted tab
-        ),
-        // Add more accepted restaurants as needed
-      ],
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('orphanages')
+          .where('isAccepted', isEqualTo: true) // Filter for accepted orphanages
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final orphanages = snapshot.data!.docs;
+
+        if (orphanages.isEmpty) {
+          return const Center(child: Text('No accepted orphanages found.'));
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: orphanages.length,
+          itemBuilder: (context, index) {
+            final orphanage = orphanages[index];
+            return OrphanageCard(
+              orphanageName: orphanage['orphanageName'],
+              location: orphanage['place'],
+              phoneNumber: orphanage['phoneNumber'],
+              email: orphanage['email'],
+              licenseImage: orphanage['licensePhotoUrl'],
+              showButtons: false, // No buttons for accepted orphanages
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -65,39 +77,50 @@ class PendingTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16.0),
-      children: [
-        OrphanageCard(
-          orphanageName: 'grandparents Hub',
-          location: 'Downtown',
-          phoneNumber: '555-123-4567',
-          email: 'sushi@hub.com',
-          licenseImage: null, // No image provided, use placeholder
-          showButtons: true, // Show buttons in Pending tab
-          onAccept: () {
-            // Handle accepted
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('orphanages')
+          .where('isAccepted', isEqualTo: false) // Filter for pending orphanages
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final orphanages = snapshot.data!.docs;
+
+        if (orphanages.isEmpty) {
+          return const Center(child: Text('No pending orphanages found.'));
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: orphanages.length,
+          itemBuilder: (context, index) {
+            final orphanage = orphanages[index];
+            return OrphanageCard(
+              orphanageName: orphanage['orphanageName'],
+              location: orphanage['place'],
+              phoneNumber: orphanage['phoneNumber'],
+              email: orphanage['email'],
+              licenseImage: orphanage['licensePhotoUrl'],
+              showButtons: true, // Show buttons for pending orphanages
+              onAccept: () {
+                FirebaseFirestore.instance
+                    .collection('orphanages')
+                    .doc(orphanage.id)
+                    .update({'isAccepted': true});
+              },
+              onDecline: () {
+                FirebaseFirestore.instance
+                    .collection('orphanages')
+                    .doc(orphanage.id)
+                    .delete();
+              },
+            );
           },
-          onDecline: () {
-            // Handle declined
-          },
-        ),
-        OrphanageCard(
-       orphanageName: 'Heaven orphanage',
-          location: 'Riverside',
-          phoneNumber: '321-987-6543',
-          email: 'pasta@heaven.com',
-          licenseImage: 'asset/images/hi.png', // Example image path
-          showButtons: true, // Show buttons in Pending tab
-          onAccept: () {
-            // Handle accepted
-          },
-          onDecline: () {
-            // Handle declined
-          },
-        ),
-        // Add more pending restaurants as needed
-      ],
+        );
+      },
     );
   }
 }
@@ -159,10 +182,15 @@ class OrphanageCard extends StatelessWidget {
             const SizedBox(height: 16),
             // Display the license image or a placeholder if no image is provided
             licenseImage != null
-                ? Image.asset(
-                    licenseImage!,
-                    height: 150,
-                    fit: BoxFit.cover,
+                ? GestureDetector(
+                    onTap: () {
+                      _showFullImage(context, licenseImage!);
+                    },
+                    child: Image.network(
+                      licenseImage!,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
                   )
                 : Container(
                     height: 150,
@@ -185,7 +213,7 @@ class OrphanageCard extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green, // Button color for "Accept"
                       ),
-                      child: const Text('Accepted'),
+                      child: const Text('Accept'),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -193,13 +221,31 @@ class OrphanageCard extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: onDecline,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red, // Button color for "Declined"
+                        backgroundColor: Colors.red, // Button color for "Decline"
                       ),
-                      child: const Text('Declined'),
+                      child: const Text('Decline'),
                     ),
                   ),
                 ],
               ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showFullImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            Image.network(imageUrl, fit: BoxFit.cover),
+            IconButton(
+              icon: const Icon(Icons.close, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
           ],
         ),
       ),

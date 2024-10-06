@@ -25,6 +25,7 @@ class FirestoreService {
         'email': email,
         'password': password,
         'description' : description,
+        'isAccepted' : false,
         'imageUrl': imageUrl, // Save the image URL
       });
     } catch (e) {

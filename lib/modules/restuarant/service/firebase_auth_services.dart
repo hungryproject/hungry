@@ -1,29 +1,57 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  final _firestore = FirebaseFirestore.instance;
+
+  // Method to handle user sign-in using email and password
+
+
   // Method to handle user sign-in using email and password
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
+      // Step 1: Sign in with email and password
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return userCredential.user;
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        // Step 2: Fetch user document from 'restaurants' collection
+        DocumentSnapshot userDoc = await _firestore
+            .collection('restaurants')
+            .doc(user.uid)
+            .get();
+
+        // Step 3: Check if the user is accepted
+        if (userDoc.exists && userDoc['isAccepted'] == true) {
+          return user; // Allow login if user is accepted
+        } else {
+          // If not accepted, sign out the user and throw an exception
+          await _auth.signOut();
+          throw Exception('Your account is not accepted yet.');
+        }
+      } else {
+        throw Exception('User not found.');
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw Exception('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         throw Exception('Wrong password provided.');
       } else {
-        throw Exception(e.message ?? 'An error occurred during sign-in.');
+        throw Exception( 'An error occurred during sign-in.');
       }
     } catch (e) {
       throw Exception('An unknown error occurred during sign-in: $e');
     }
   }
 
+ 
   // Method to handle user registration using email and password
   Future<User?> registerWithEmailAndPassword(String email, String password) async {
     try {
