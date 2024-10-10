@@ -34,7 +34,7 @@ class Adminauthservices {
       );
 
       if(userCredential.user != null){
-        final a =  await _firestore.collection('Admin').doc(getId());
+        final a =  _firestore.collection('Admin').doc(getId());
 
         if(a.id == getId()){
 

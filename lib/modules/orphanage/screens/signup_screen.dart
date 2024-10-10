@@ -5,6 +5,8 @@ import 'package:hungry/modules/orphanage/services/OrphanageAuthServices.dart';
 import 'package:image_picker/image_picker.dart';
 
 class OrphanageLoginPage extends StatefulWidget {
+  const OrphanageLoginPage({super.key});
+
   @override
   State<OrphanageLoginPage> createState() => _OrphanageLoginPageState();
 }

@@ -5,7 +5,7 @@ import 'package:hungry/modules/restuarant/screens/login_screen.dart';
 import 'package:lottie/lottie.dart';
 
 class ChooseScreen extends StatelessWidget {
-  const ChooseScreen({Key? key}) : super(key: key);
+  const ChooseScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class ChooseScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(child: SizedBox.shrink()),
+          const Expanded(child: SizedBox.shrink()),
           Expanded(
             flex: 4,
             child: Padding(
@@ -42,7 +42,7 @@ class ChooseScreen extends StatelessWidget {
                     'asset/Animation - 1728209600110.json', // Replace with actual image URL
                     Colors.blue,
                     Icons.admin_panel_settings,
-                    AdminLoginScreen()
+                    const AdminLoginScreen()
                   ),
                   // Restaurant Card
                   buildOptionCard(
@@ -51,7 +51,7 @@ class ChooseScreen extends StatelessWidget {
                     'asset/Animation - 1728209691216.json', // Replace with actual image URL
                     Colors.orange,
                     Icons.restaurant_menu,
-                    LoginScreen()
+                    const LoginScreen()
                   ),
                   // Orphanage Card
                   buildOptionCard(
@@ -60,13 +60,13 @@ class ChooseScreen extends StatelessWidget {
                     'asset/Animation - 1728213854723.json', // Replace with actual image URL
                     Colors.green,
                     Icons.home,
-                    OrphanageLoginScreen()
+                    const OrphanageLoginScreen()
                   ),
                 ],
               ),
             ),
           ),
-          Expanded(child: SizedBox.shrink()),
+          const Expanded(child: SizedBox.shrink()),
         ],
       ),
     );
@@ -115,7 +115,7 @@ class ChooseScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 
                 fontSize: 15,
                 fontWeight: FontWeight.w400,

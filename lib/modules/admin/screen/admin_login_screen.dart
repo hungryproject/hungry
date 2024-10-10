@@ -41,7 +41,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             MaterialPageRoute(builder: (context) => const AdminPage()),
           );
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Welcome'),
             ),
           );

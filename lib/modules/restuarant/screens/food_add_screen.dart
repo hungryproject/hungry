@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../service/fire_store_serviece.dart'; // Adjust import path as necessary
 
 class FoodFormPage extends StatefulWidget {

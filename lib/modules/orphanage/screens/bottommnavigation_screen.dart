@@ -25,7 +25,7 @@ class _OrphnageRootScreenState extends State<OrphnageRootScreen> {
   List<Widget> pageList = [
     const Orphanagehomescreen(),
     const NotificationsPage(),
-    RecentOrdersScreen(),
+    const RecentOrdersScreen(),
     const Proffileorph()
     
   ];

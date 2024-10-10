@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hungry/firebase_options.dart';
 import 'package:hungry/modules/choose_screen.dart';
-import 'package:hungry/modules/orphanage/screens/bottommnavigation_screen.dart';
 
 Future<void> main() async {
    WidgetsFlutterBinding.ensureInitialized();

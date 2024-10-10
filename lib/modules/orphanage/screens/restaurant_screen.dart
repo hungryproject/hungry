@@ -1,9 +1,7 @@
 import 'package:animated_rating_stars/animated_rating_stars.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/orphanage/services/OrphanageAuthServices.dart';
 import 'package:hungry/modules/orphanage/services/orphanage_review_service.dart';
-import 'package:hungry/modules/restuarant/service/firebase_auth_services.dart';
 
 class Restaurantscreen extends StatefulWidget {
   final String location;

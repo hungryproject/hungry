@@ -51,7 +51,7 @@ class AcceptedTab extends StatelessWidget {
 
         final restaurants = snapshot.data!.docs;
 
-        return restaurants.isEmpty ? Center(child: Text('No Resturents registerd yet'),)  :ListView.builder(
+        return restaurants.isEmpty ? const Center(child: Text('No Resturents registerd yet'),)  :ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemCount: restaurants.length,
           itemBuilder: (context, index) {
