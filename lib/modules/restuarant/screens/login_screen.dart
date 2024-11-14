@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final password = _passwordController.text;
 
       try {
-        User? user = await _authService.signInWithEmailAndPassword(email, password);
+        User? user =  await _authService.signInWithEmailAndPassword(email, password);
         
         setState(() {
           _isLoading = false; // Hide loading indicator

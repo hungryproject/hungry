@@ -7,9 +7,9 @@ class OrdersScreen extends StatefulWidget {
   State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderStateMixin {
   // Sample data for the list of orders
-  final List<Map<String, String>> orders = [
+  final List<Map<String, String>> acceptedOrders = [
     {
       'orphanageName': 'Happy Homes Orphanage',
       'place': '123 Elm Street',
@@ -20,61 +20,121 @@ class _OrdersScreenState extends State<OrdersScreen> {
       'place': '456 Oak Avenue',
       'foodItem': 'Burger',
     },
+  ];
+
+  final List<Map<String, String>> deliveredOrders = [
     {
       'orphanageName': 'Bright Futures Orphanage',
       'place': '789 Pine Road',
       'foodItem': 'Pasta',
     },
-    // Add more orders as needed
+    {
+      'orphanageName': 'Helping Hands Orphanage',
+      'place': '321 Cedar Blvd',
+      'foodItem': 'Sandwich',
+    },
   ];
 
   // List of colors to alternate between cards
   final List<Color> cardColors = [
     Colors.blue[100]!,
+    Colors.green[100]!,
   ];
+
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ORDERS'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: 'Accepted Orders'),
+            Tab(text: 'Delivered Orders'),
+          ],
+        ),
       ),
-      body: ListView.builder(
-        itemCount: orders.length,
-        itemBuilder: (context, index) {
-          final order = orders[index];
-          final cardColor = cardColors[index % cardColors.length]; // Assign a color based on index
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          // Accepted Orders Tab
+          ListView.builder(
+            itemCount: acceptedOrders.length,
+            itemBuilder: (context, index) {
+              final order = acceptedOrders[index];
+              final cardColor = cardColors[index % cardColors.length];
 
-          return AcceptedOrderCard(
-            orphanageName: order['orphanageName']!,
-            place: order['place']!,
-            foodItem: order['foodItem']!,
-            color: cardColor, // Pass the color to the card
-          );
-        },
+              return OrderCard(
+                orphanageName: order['orphanageName']!,
+                place: order['place']!,
+                foodItem: order['foodItem']!,
+                color: cardColor,
+                buttonText: 'Deliver',
+                onPressed: () {
+                  // Handle Deliver button press
+                },
+              );
+            },
+          ),
+          // Delivered Orders Tab
+          ListView.builder(
+            itemCount: deliveredOrders.length,
+            itemBuilder: (context, index) {
+              final order = deliveredOrders[index];
+              final cardColor = cardColors[index % cardColors.length];
+
+              return OrderCard(
+                orphanageName: order['orphanageName']!,
+                place: order['place']!,
+                foodItem: order['foodItem']!,
+                color: cardColor,
+                buttonText: 'Completed',
+                onPressed: null, // Disable button for delivered orders
+              );
+            },
+          ),
+        ],
       ),
     );
   }
 }
 
-class AcceptedOrderCard extends StatelessWidget {
+class OrderCard extends StatelessWidget {
   final String orphanageName;
   final String place;
   final String foodItem;
-  final Color color; // New color parameter
+  final Color color;
+  final String buttonText;
+  final VoidCallback? onPressed;
 
-  const AcceptedOrderCard({
+  const OrderCard({
     super.key,
     required this.orphanageName,
     required this.place,
     required this.foodItem,
-    required this.color, // Color is required
+    required this.color,
+    required this.buttonText,
+    this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: color, // Use the color for the card background
+      color: color,
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       elevation: 4,
       child: Padding(
@@ -112,22 +172,19 @@ class AcceptedOrderCard extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
-            // Full-width rounded rectangle Accept button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle Accept button press
-                },
+                onPressed: onPressed,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, // Button color
+                  backgroundColor: onPressed != null ? Colors.green : Colors.grey,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0), // Rounded corners
+                    borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-                child: const Text(
-                  'Accept',
-                  style: TextStyle(color: Color.fromARGB(255, 8, 8, 8)),
+                child: Text(
+                  buttonText,
+                  style: const TextStyle(color: Colors.black),
                 ),
               ),
             ),

@@ -26,7 +26,7 @@ class _OrphnageRootScreenState extends State<OrphnageRootScreen> {
     const Orphanagehomescreen(),
     const NotificationsPage(),
     const RecentOrdersScreen(),
-    const Proffileorph()
+    const ProfileOrphanage()
     
   ];
 
