@@ -34,6 +34,8 @@ class _OrphanageLoginScreenState extends State<OrphanageLoginScreen> {
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
+        print(_emailController.text.trim());
+        print( _passwordController.text.trim());
 
         if (user != null) {
           // Navigate to the home screen after successful login

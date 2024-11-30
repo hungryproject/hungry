@@ -92,10 +92,10 @@ class FirestoreService {
   // Method to add an order
   Future<void> addfood({
     required String foodName,
-    required int quantity,
+ 
     required String availableUntil,
     required bool isDelivered,
-    required bool isOrderAccepted,
+    required bool isOrderAccepted, required int count,
   }) async {
     try {
       User? user = _firebaseAuthService.getCurrentUser();
@@ -103,7 +103,7 @@ class FirestoreService {
       if (user != null) {
         await _firestore.collection('foods').add({
           'foodName': foodName,
-          'quantity': quantity,
+          'count': count,
           'resid': user.uid,
           'availableUntil': availableUntil, // Storing date as a string
           'isDelivered': isDelivered,
