@@ -34,6 +34,8 @@ class _OrphanageLoginScreenState extends State<OrphanageLoginScreen> {
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
+        print(_emailController.text.trim());
+        print( _passwordController.text.trim());
 
         if (user != null) {
           // Navigate to the home screen after successful login
@@ -109,7 +111,7 @@ class _OrphanageLoginScreenState extends State<OrphanageLoginScreen> {
                       labelText: 'Email',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color.fromARGB(179, 56, 189, 98),
+                      fillColor: Color.fromARGB(179, 240, 74, 8),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -127,7 +129,7 @@ class _OrphanageLoginScreenState extends State<OrphanageLoginScreen> {
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color.fromARGB(179, 66, 167, 60),
+                      fillColor: Color.fromARGB(179, 220, 64, 11),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {

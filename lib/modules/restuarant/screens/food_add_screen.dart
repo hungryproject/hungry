@@ -11,7 +11,7 @@ class FoodFormPage extends StatefulWidget {
 
 class _FoodFormPageState extends State<FoodFormPage> {
   final _foodNameController = TextEditingController();
-  final _quantityController = TextEditingController();
+  final _countController = TextEditingController();
   final _timeController = TextEditingController();
   final FirestoreService _firestoreService = FirestoreService(); // Instance of FirestoreService
   bool _isLoading = false; // Loading state indicator
@@ -19,7 +19,6 @@ class _FoodFormPageState extends State<FoodFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -39,10 +38,10 @@ class _FoodFormPageState extends State<FoodFormPage> {
             ),
             const SizedBox(height: 16),
             TextField(
-              controller: _quantityController,
+              controller: _countController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'Quantity',
+                labelText: 'Count of Individuals Who Can Have',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -113,14 +112,12 @@ class _FoodFormPageState extends State<FoodFormPage> {
                       final orderData = doc.data() as Map<String, dynamic>;
                       return AcceptedOrderCard(
                         Name: orderData['foodName'] ?? 'Unknown',
-                        quantity: orderData['quantity'].toString(),
+                        count: orderData['count'].toString(),
                         availableUntil: orderData['availableUntil'] ?? 'N/A',
                         date: orderData['createdAt'] != null
                             ? (orderData['createdAt'] as Timestamp).toDate().toString()
                             : 'N/A',
-                        onAccept: () {
-                         
-                        },
+                        onAccept: () {},
                       );
                     }).toList(),
                   );
@@ -153,10 +150,10 @@ class _FoodFormPageState extends State<FoodFormPage> {
 
     // Get input values
     final foodName = _foodNameController.text.trim();
-    final quantity = int.tryParse(_quantityController.text.trim()) ?? 0;
+    final count = int.tryParse(_countController.text.trim()) ?? 0;
     final timeAvailable = _timeController.text.trim();
 
-    if (foodName.isEmpty || quantity <= 0 || timeAvailable.isEmpty) {
+    if (foodName.isEmpty || count <= 0 || timeAvailable.isEmpty) {
       // Show error message if inputs are not valid
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill out all fields correctly.')),
@@ -172,10 +169,10 @@ class _FoodFormPageState extends State<FoodFormPage> {
     try {
       await _firestoreService.addfood(
         foodName: foodName,
-        quantity: quantity,
+        count: count,
         availableUntil: timeAvailable,
         isDelivered: false,
-        isOrderAccepted: false,
+        isOrderAccepted: false, 
       );
 
       // Show success message
@@ -185,7 +182,7 @@ class _FoodFormPageState extends State<FoodFormPage> {
 
       // Clear the form fields
       _foodNameController.clear();
-      _quantityController.clear();
+      _countController.clear();
       _timeController.clear();
     } catch (e) {
       // Show error message if something goes wrong
@@ -199,19 +196,19 @@ class _FoodFormPageState extends State<FoodFormPage> {
       });
     }
   }
-
-  
 }
+
 class AcceptedOrderCard extends StatelessWidget {
   final String Name;
-  final String quantity;
+  final String count;
   final String availableUntil;
   final String date;
   final VoidCallback onAccept;
 
-  const AcceptedOrderCard({super.key, 
+  const AcceptedOrderCard({
+    super.key,
     required this.Name,
-    required this.quantity,
+    required this.count,
     required this.availableUntil,
     required this.date,
     required this.onAccept,
@@ -233,7 +230,7 @@ class AcceptedOrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Quantity: $quantity',
+              'Count of Individuals Who Can Have: $count',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 8),
@@ -246,7 +243,6 @@ class AcceptedOrderCard extends StatelessWidget {
               'Date: $date',
               style: const TextStyle(fontSize: 16),
             ),
-           
           ],
         ),
       ),

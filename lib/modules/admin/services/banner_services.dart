@@ -38,7 +38,7 @@ class BannerServices {
     required BuildContext context,
     required File imageFile,
     required String title,
-    required String description,
+    required String description, required bool isForOrphanage, required bool isForRestaurant,
   }) async {
     try {
       String? imageUrl = await uploadImage(imageFile, context);
@@ -49,6 +49,8 @@ class BannerServices {
           'imageUrl': imageUrl,
           'title': title,
           'description': description,
+          'isforrestaurant':isForRestaurant,
+          'isfororphanage':isForOrphanage,
           'createdAt': FieldValue.serverTimestamp(),
         };
 
