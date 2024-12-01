@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hungry/utils/helper.dart';
 
 class Adminauthservices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -37,6 +38,9 @@ class Adminauthservices {
         final a =  _firestore.collection('Admin').doc(getId());
 
         if(a.id == getId()){
+
+         await  Helper().addtoken(id: a.id, collectionName: 'Admin');
+          
 
           return true;
         }

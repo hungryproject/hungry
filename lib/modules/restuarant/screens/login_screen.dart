@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import for User type
 import 'package:hungry/modules/restuarant/screens/bottomnavigation_screen.dart';
 import 'package:hungry/modules/restuarant/screens/signup_screen.dart';
+import 'package:hungry/utils/helper.dart';
 import '../service/firebase_auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       try {
         User? user = await _authService.signInWithEmailAndPassword(email, password);
+
+        await Helper().sendNotificationToDevice('dcc7b081-eae7-4ca3-b3b0-d90fc57a2ef5','title','body');
         
         setState(() {
           _isLoading = false; // Hide loading indicator
