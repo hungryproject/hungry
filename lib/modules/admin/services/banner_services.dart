@@ -96,8 +96,11 @@ class BannerServices {
   }
 
   /// Fetches the list of banners as a stream of real-time updates from Firestore.
-  Stream<QuerySnapshot> fetchBanners() {
-    return _firestore.collection('banners').orderBy('createdAt', descending: true).snapshots();
+  Stream<QuerySnapshot> fetchBanners({
+    required String field,
+    required bool value,
+  }) {
+    return _firestore.collection('banners').where(field,isEqualTo: value).snapshots();
   }
 
   /// Updates a banner's details (title, description, and optionally image).

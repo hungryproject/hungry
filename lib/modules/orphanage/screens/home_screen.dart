@@ -116,6 +116,8 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
                       margin: const EdgeInsets.only(right: 16),
                       child: GestureDetector(
                         onTap: () {
+
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -178,10 +180,7 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
                                       filledIcon: Icons.star,
                                       halfFilledIcon: Icons.star_half,
                                       emptyIcon: Icons.star_border,
-                                      onChanged: (double rating) {
-                                        
-
-                                        
+                                      onChanged: (double rating) {  
                                       },
                                       displayRatingValue: true,
                                       interactiveTooltips: true,

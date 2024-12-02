@@ -20,6 +20,8 @@ dependencies:
   firebase_messaging: ^14.7.10
   http: ^1.2.2
   onesignal_flutter: ^5.2.6
+  intl: ^0.20.1
+  particles_fly: ^0.0.9
   
 
 dev_dependencies:

@@ -3,10 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart'; // Import for User type
 import 'package:hungry/modules/orphanage/screens/bottommnavigation_screen.dart';
 import 'package:hungry/modules/orphanage/screens/signup_screen.dart';
 import 'package:hungry/modules/orphanage/services/OrphanageAuthServices.dart';
-import 'package:hungry/modules/restuarant/screens/bottomnavigation_screen.dart';
-import 'package:hungry/modules/restuarant/screens/signup_screen.dart';
 import 'package:lottie/lottie.dart';
-import '../../restuarant/service/firebase_auth_services.dart';
 
 class OrphanageLoginScreen extends StatefulWidget {
   const OrphanageLoginScreen({super.key});
@@ -54,7 +51,7 @@ class _OrphanageLoginScreenState extends State<OrphanageLoginScreen> {
       } catch(e){
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString() ?? 'Failed to sign in')),
+          SnackBar(content: Text(e.toString())),
         );
 
       }
