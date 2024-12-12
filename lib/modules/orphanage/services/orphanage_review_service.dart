@@ -7,6 +7,8 @@ class OrphanageReviewService {
   // Function to add a list of reviews and ratings to a single document in Firestore
   Future<void> addReviewsAndRatings(String restaurantId,String userId,int rating, String review) async {
     try {
+
+      print(restaurantId);
       
       _firestore.collection('review_rating').add({
         'review' : review,

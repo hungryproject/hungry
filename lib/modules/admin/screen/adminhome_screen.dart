@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/admin/screen/admin_order_list_screen.dart';
+import 'package:hungry/modules/admin/screen/admin_review_screen.dart';
 import 'package:hungry/modules/admin/screen/banner_screen.dart';
 import 'package:hungry/modules/admin/screen/view_added_banners_screen.dart';
 import 'package:hungry/modules/admin/screen/vieworph_screen.dart';
@@ -101,7 +102,7 @@ class AdminPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AdminOrderListScreen()),
+                  MaterialPageRoute(builder: (context) => RestaurantReviewScreen()),
                 );
               },
             ),

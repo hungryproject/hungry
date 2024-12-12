@@ -50,7 +50,7 @@ class RecentOrdersScreen extends StatelessWidget {
                       restaurantName: data['resid'],
                       foodName: data['foodName'],
                       place: 'Unknown Place', // Replace with actual place if available
-                      quantity: data['quantity'],
+                      quantity: data['count'],
                       availableUntil: data['availableUntil'],
                       createdAt: (data['createdAt'] as Timestamp).toDate(),
                       isDelivered: data['isDelivered'],
@@ -88,7 +88,7 @@ class RecentOrdersScreen extends StatelessWidget {
                       restaurantName: data['resid'],
                       foodName: data['foodName'],
                       place: 'Unknown Place', // Replace with actual place if available
-                      quantity: data['quantity'],
+                      quantity: data['count'],
                       availableUntil: data['availableUntil'],
                       createdAt: (data['createdAt'] as Timestamp).toDate(),
                       isDelivered: data['isDelivered'],

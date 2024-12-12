@@ -70,7 +70,7 @@ class NotificationsPage extends StatelessWidget {
                 restaurantName: data['resid'], // Assuming resid refers to restaurant name
                 place: 'Unknown Place',        // You can add the place field if available
                 foodItem: data['foodName'],
-                quantity: data['quantity'],
+                quantity: data['count'],
                 availableUntil: data['availableUntil'], // New field
                 orderId: data.id, // Pass the order ID to the card
                 orderService: orderService, // Pass the order service instance
@@ -116,14 +116,29 @@ class NotificationCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              restaurantName,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              place,
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-            ),
+
+            StreamBuilder(stream: FirebaseFirestore.instance.collection('restaurants').doc(restaurantName).snapshots(),
+             builder: (context, snapshot) {
+               if(snapshot.connectionState == ConnectionState.waiting){
+                return Text('Loading...');
+               }
+
+               if(snapshot.hasData){
+
+                final resData  = snapshot.data?.data();
+
+                return Column(
+                  children: [
+                    Text(resData!['name']),
+                    Text(resData['place']),
+                  ],
+                );
+               }
+
+               return Text('nodata');
+             },),
+           
+            
             const SizedBox(height: 10),
             Text(
               'Food Item: $foodItem',

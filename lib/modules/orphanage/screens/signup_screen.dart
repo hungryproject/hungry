@@ -14,15 +14,11 @@ class OrphanageLoginPage extends StatefulWidget {
 class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
   // Controllers to get text input
   final TextEditingController orphanageNameController = TextEditingController();
-
   final TextEditingController placeController = TextEditingController();
-
   final TextEditingController numberController = TextEditingController();
-
+  final TextEditingController peopleController = TextEditingController(); // New controller for number of people
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
-
   final TextEditingController confirmPasswordController = TextEditingController();
 
   // Variable to store selected image
@@ -64,10 +60,10 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
         place: placeController.text,
         phoneNumber: numberController.text,
         licensePhotoUrl: _licensePhoto!,
+        numberOfPeople: peopleController.text, // Pass the number of people
       );
 
       Navigator.pop(context);
-      // Handle successful registration, e.g., navigate to another screen
       setState(() {
         isLoading = false;
       });
@@ -75,7 +71,6 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
       setState(() {
         isLoading = false;
       });
-      // Handle error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
@@ -101,7 +96,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              
+
               // Orphanage Name
               TextField(
                 controller: orphanageNameController,
@@ -111,7 +106,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 ),
               ),
               const SizedBox(height: 15),
-              
+
               // Place
               TextField(
                 controller: placeController,
@@ -121,7 +116,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 ),
               ),
               const SizedBox(height: 15),
-              
+
               // Number
               TextField(
                 controller: numberController,
@@ -132,7 +127,18 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 ),
               ),
               const SizedBox(height: 15),
-              
+
+              // Number of People
+              TextField(
+                controller: peopleController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Number of People',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 15),
+
               // Email ID
               TextField(
                 controller: emailController,
@@ -143,7 +149,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 ),
               ),
               const SizedBox(height: 15),
-              
+
               // Password
               TextField(
                 controller: passwordController,
@@ -154,7 +160,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 ),
               ),
               const SizedBox(height: 15),
-              
+
               // Confirm Password
               TextField(
                 controller: confirmPasswordController,
@@ -165,7 +171,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 ),
               ),
               const SizedBox(height: 15),
-              
+
               // Display selected image
               _licensePhoto != null
                   ? Image.file(
@@ -186,7 +192,7 @@ class _OrphanageLoginPageState extends State<OrphanageLoginPage> {
                 label: const Text('Upload License'),
               ),
               const SizedBox(height: 30),
-              
+
               // Signup Button with loading state
               SizedBox(
                 width: double.infinity,

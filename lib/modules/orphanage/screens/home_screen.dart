@@ -53,11 +53,14 @@ class _OrphanagehomescreenState extends State<Orphanagehomescreen> {
                 ),
                 items: banners.map((banner) {
                   final imageUrl = banner['imageUrl'] ?? '';
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   );
                 }).toList(),

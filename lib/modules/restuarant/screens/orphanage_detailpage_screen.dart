@@ -4,7 +4,7 @@ class OrphanageDetailScreen extends StatelessWidget {
   final String location;
   final String phone;
   final String manager;
-  final String description;
+
   final String  image;
 
   const OrphanageDetailScreen({
@@ -12,7 +12,7 @@ class OrphanageDetailScreen extends StatelessWidget {
     required this.location,
     required this.phone,
     required this.manager,
-    required this.description, required this.image,
+    required this.image,
   });
 
   @override
@@ -111,14 +111,7 @@ class OrphanageDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16.0),
 
-                      // Description
-                      Text(
-                        description,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                        ),
-                      ),
+                     
                     ],
                   ),
                 ),

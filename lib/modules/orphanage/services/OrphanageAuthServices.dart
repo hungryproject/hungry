@@ -16,7 +16,7 @@ class OrphanageAuthServices {
     required String orphanageName,
     required String place,
     required String phoneNumber,
-    required File licensePhotoUrl,
+    required File licensePhotoUrl, required String numberOfPeople,
   }) async {
     try {
       // Register user with Firebase Authentication

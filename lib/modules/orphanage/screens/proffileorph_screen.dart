@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileOrphanage extends StatelessWidget {
   const ProfileOrphanage({super.key});
@@ -79,7 +82,7 @@ class ProfileOrphanage extends StatelessWidget {
           ),
         ],
       ),
-      body: FutureBuilder<Map<String, dynamic>?>(
+      body: FutureBuilder<Map<String, dynamic>?>( 
         future: _getOrphanageDetails(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -155,6 +158,7 @@ class ProfileOrphanage extends StatelessWidget {
     );
   }
 }
+
 class EditOrphanageDetailsScreen extends StatefulWidget {
   @override
   _EditOrphanageDetailsScreenState createState() =>
@@ -168,10 +172,34 @@ class _EditOrphanageDetailsScreenState
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _membersController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  File? _image;
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   Future<void> _saveChanges() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) return;
+
+    String? imageUrl;
+    if (_image != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('orphanage_photos')
+          .child('$userId.jpg');
+      await ref.putFile(_image!);
+      imageUrl = await ref.getDownloadURL();
+    }
 
     final orphanageData = {
       'orphanageName': _nameController.text.trim(),
@@ -181,10 +209,22 @@ class _EditOrphanageDetailsScreenState
       'members': int.tryParse(_membersController.text.trim()) ?? 0,
     };
 
+    // Update the orphanage data
     await FirebaseFirestore.instance
         .collection('orphanages')
         .doc(userId)
         .update(orphanageData);
+
+    if (_passwordController.text.trim().isNotEmpty &&
+        _passwordController.text.trim() == _confirmPasswordController.text.trim()) {
+      await FirebaseAuth.instance.currentUser!
+          .updatePassword(_passwordController.text.trim());
+    }
+
+    if (_emailController.text.trim().isNotEmpty) {
+      await FirebaseAuth.instance.currentUser!
+          .updateEmail(_emailController.text.trim());
+    }
 
     Navigator.pop(context);
   }
@@ -198,39 +238,65 @@ class _EditOrphanageDetailsScreenState
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Orphanage Name'),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _locationController,
-              decoration: const InputDecoration(labelText: 'Location'),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _phoneController,
-              decoration: const InputDecoration(labelText: 'Phone'),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _membersController,
-              decoration: const InputDecoration(labelText: 'Number of Members'),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _saveChanges,
-              child: const Text('Save Changes'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Orphanage Name'),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _locationController,
+                decoration: const InputDecoration(labelText: 'Location'),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email ID'),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _phoneController,
+                decoration: const InputDecoration(labelText: 'Phone'),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _membersController,
+                decoration: const InputDecoration(labelText: 'Number of Members'),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: 'New Password'),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _confirmPasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: 'Confirm Password'),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: _pickImage,
+                child: const Text('Pick Orphanage Photo'),
+              ),
+              if (_image != null)
+                Image.file(
+                  _image!,
+                  height: 150,
+                  width: 150,
+                  fit: BoxFit.cover,
+                ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: _saveChanges,
+                child: const Text('Save Changes'),
+              ),
+            ],
+          ),
         ),
       ),
     );

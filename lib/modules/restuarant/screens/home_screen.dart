@@ -1,19 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hungry/modules/restuarant/screens/orphanage_detailpage_screen.dart';
 
 class RestaurantHomeScreen extends StatelessWidget {
-  final List<Widget> imagelist = [
-    ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Image.asset(
-        "asset/images/1000_F_263972163_xjqgCRQlDD4azp31qqpcE4okbxDK6pAu.jpg",
-        fit: BoxFit.cover,
-      ),
-    ),
-  ];
-
-   RestaurantHomeScreen({super.key});
+  RestaurantHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +16,56 @@ class RestaurantHomeScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 60),
             const Text(
-              'Lend a hand,give a can',
+              'Lend a hand, give a can',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 30),
-            CarouselSlider(
-              options: CarouselOptions(
-                autoPlay: true,
-                aspectRatio: 2.0,
-                enlargeCenterPage: true,
-              ),
-              items: imagelist,
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('banners')
+                  .where('isforrestaurant', isEqualTo: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return const Center(child: Text("Error loading banners"));
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text("No banners available"));
+                }
+
+                final bannerImages = snapshot.data!.docs.map((doc) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        doc['imageUrl'] ?? '',
+                        fit: BoxFit.fitWidth,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Center(child: Icon(Icons.error));
+                        },
+                      ),
+                    ),
+                  );
+                }).toList();
+
+                return CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: true,
+                  ),
+                  items: bannerImages,
+                );
+              },
             ),
             const SizedBox(height: 20),
             const Text(
@@ -50,86 +77,102 @@ class RestaurantHomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 4, // Number of orphanages to display
-                  itemBuilder: (context, index) {
-                   
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('orphanages')
+                    .where('isAccepted', isEqualTo: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                    return Container(
-                      width: 200,
-                      margin: const EdgeInsets.only(right: 16),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Error fetching data"));
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text("No orphanages found"));
+                  }
+
+                  final orphanages = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: orphanages.length,
+                    itemBuilder: (context, index) {
+                      final orphanage = orphanages[index];
+                      return Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(right: 16),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const OrphanageDetailScreen(
-                                    description:
-                                        'his is a small description of the details section. Here you can add any relevant information about the item or place that the image represents. This area is perfect for a brief overview or summary.',
-                                    location: 'calicut',
-                                    manager: 'jhone',
-                                    phone: '12345678',
-                                    image:
-                                        'https://images.pLeather, MDF, PET, Acyrlicexels.com/photos/933624/pexels-photo-933624.jpeg?auto=compress&cs=tinysrgb&w=600'),
-                              ));
-                        },
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(15)),
-                                child: Image.asset(
-                                  'asset/images/1000_F_263972163_xjqgCRQlDD4azp31qqpcE4okbxDK6pAu.jpg',
-                                  height: 120,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
+                                builder: (context) => OrphanageDetailScreen(
+                                  
+                                  location: orphanage['place'] ?? '',
+                                  manager: orphanage['orphanageName'] ?? '',
+                                  phone: orphanage['phoneNumber'] ?? '',
+                                  image: orphanage['licensePhotoUrl'] ?? '',
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Orphanages',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'place',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                  ],
+                            );
+                          },
+                          child: Card(
+                            color: Colors.white,
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(15)),
+                                  child: Image.network(
+                                    orphanage['licensePhotoUrl'] ?? '',
+                                    height: 120,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        orphanage['orphanageName'] ??
+                                            'Orphanage',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        orphanage['place'] ?? 'Place',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
-          
-          
-          
           ],
         ),
       ),
