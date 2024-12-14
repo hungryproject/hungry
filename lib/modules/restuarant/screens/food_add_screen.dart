@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../service/fire_store_serviece.dart'; // Adjust import path as necessary
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class FoodFormPage extends StatefulWidget {
   const FoodFormPage({super.key});
@@ -13,120 +13,117 @@ class _FoodFormPageState extends State<FoodFormPage> {
   final _foodNameController = TextEditingController();
   final _countController = TextEditingController();
   final _timeController = TextEditingController();
-  final FirestoreService _firestoreService = FirestoreService(); // Instance of FirestoreService
-  bool _isLoading = false; // Loading state indicator
+  bool _isLoading = false;
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Food Donation Form'),
+        backgroundColor: Colors.green.shade600,
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            // Form for Food Details
-            const Text(
-              'ENTER FOOD DETAILS',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _foodNameController,
-              decoration: const InputDecoration(
-                labelText: 'Food Name',
-                border: OutlineInputBorder(),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                'Donate Your Food Today!',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.green.shade700,
+                  letterSpacing: 1.2,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _countController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Count of Individuals Who Can Have',
-                border: OutlineInputBorder(),
-              ),
-            ),
+            _buildInputField(_foodNameController, 'Food Name'),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _timeController,
-                    decoration: const InputDecoration(
-                      labelText: 'Time Available Until',
-                      border: OutlineInputBorder(),
-                    ),
-                    readOnly: true,
-                    onTap: () {
-                      _selectTime(context);
-                    },
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.access_time),
-                  onPressed: () {
-                    _selectTime(context);
-                  },
-                ),
-              ],
-            ),
+            _buildInputField(_countController, 'Count of Individuals Who Can Have', isNumber: true),
+            const SizedBox(height: 16),
+            _buildTimeField(context),
             const SizedBox(height: 32),
-            // Display loading indicator or button based on loading state
             _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : ElevatedButton(
                     onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green, // Background color
+                      backgroundColor: Colors.green.shade700,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     child: const Text(
-                      'OK',
-                      style: TextStyle(color: Colors.white),
+                      'Donate Now',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
             const SizedBox(height: 32),
-            // Recent Orders Title
             const Text(
-              'RECENT FOODS',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              'Recent Food Donations',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            // StreamBuilder to display pending orders
-            StreamBuilder<QuerySnapshot>(
-              stream: _firestoreService.getPendingOrders(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error fetching orders: ${snapshot.error}'),
-                  );
-                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text('No pending orders.'));
-                } else {
-                  final orders = snapshot.data!.docs;
-                  return Column(
-                    children: orders.map((doc) {
-                      final orderData = doc.data() as Map<String, dynamic>;
-                      return AcceptedOrderCard(
-                        Name: orderData['foodName'] ?? 'Unknown',
-                        count: orderData['count'].toString(),
-                        availableUntil: orderData['availableUntil'] ?? 'N/A',
-                        date: orderData['createdAt'] != null
-                            ? (orderData['createdAt'] as Timestamp).toDate().toString()
-                            : 'N/A',
-                        onAccept: () {},
-                      );
-                    }).toList(),
-                  );
-                }
-              },
-            ),
+            _buildRecentDonationsList(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInputField(TextEditingController controller, String label, {bool isNumber = false}) {
+    return TextField(
+      controller: controller,
+      keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.green),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.green.shade600, width: 2),
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimeField(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            controller: _timeController,
+            decoration: InputDecoration(
+              labelText: 'Time Available Until',
+              labelStyle: TextStyle(color: Colors.green),
+              border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.green.shade600, width: 2),
+              ),
+            ),
+            readOnly: true,
+            onTap: () {
+              _selectTime(context);
+            },
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.access_time, color: Colors.green),
+          onPressed: () {
+            _selectTime(context);
+          },
+        ),
+      ],
     );
   }
 
@@ -143,109 +140,124 @@ class _FoodFormPageState extends State<FoodFormPage> {
   }
 
   void _submitForm() async {
-    // Set loading state to true
     setState(() {
       _isLoading = true;
     });
 
-    // Get input values
     final foodName = _foodNameController.text.trim();
     final count = int.tryParse(_countController.text.trim()) ?? 0;
     final timeAvailable = _timeController.text.trim();
 
     if (foodName.isEmpty || count <= 0 || timeAvailable.isEmpty) {
-      // Show error message if inputs are not valid
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill out all fields correctly.')),
       );
-      // Set loading state to false
       setState(() {
         _isLoading = false;
       });
       return;
     }
 
-    // Call FirestoreService to add order
     try {
-      await _firestoreService.addfood(
-        foodName: foodName,
-        count: count,
-        availableUntil: timeAvailable,
-        isDelivered: false,
-        isOrderAccepted: false, 
-      );
+      // Get current user's UID
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You need to be logged in to donate.')),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
 
-      // Show success message
+      // Add donation data to Firestore
+      await _firestore.collection('foods').add({
+        'foodName': foodName,
+        'count': count,
+        'availableUntil': timeAvailable,
+        'createdAt': FieldValue.serverTimestamp(),
+        'isDelivered': false, // Assuming the food is not delivered yet
+        'isOrderAccepted': false, // Assuming the order is accepted by default
+        'resid': user.uid, // Save the user UID
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Order added successfully!')),
       );
 
-      // Clear the form fields
       _foodNameController.clear();
       _countController.clear();
       _timeController.clear();
     } catch (e) {
-      // Show error message if something goes wrong
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to add order: $e')),
       );
     } finally {
-      // Set loading state to false
       setState(() {
         _isLoading = false;
       });
     }
   }
-}
 
-class AcceptedOrderCard extends StatelessWidget {
-  final String Name;
-  final String count;
-  final String availableUntil;
-  final String date;
-  final VoidCallback onAccept;
+  Widget _buildRecentDonationsList() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore
+          .collection('foods')
+          .orderBy('createdAt', descending: true) // Order by creation time, descending
+          .limit(5) // Limit to 5 recent donations
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-  const AcceptedOrderCard({
-    super.key,
-    required this.Name,
-    required this.count,
-    required this.availableUntil,
-    required this.date,
-    required this.onAccept,
-  });
+        if (snapshot.hasError) {
+          return const Center(child: Text('Something went wrong.'));
+        }
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Name: $Name',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Count of Individuals Who Can Have: $count',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Available Until: $availableUntil',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Date: $date',
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No recent donations.'));
+        }
+
+        final donations = snapshot.data!.docs;
+
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: donations.length,
+          itemBuilder: (context, index) {
+            final donation = donations[index];
+            final foodName = donation['foodName'] ?? 'Unknown Food';
+            final count = donation['count'] ?? 0;
+            final timeAvailable = donation['availableUntil'] ?? 'Unknown Time';
+            final isDelivered = donation['isDelivered'] ?? false;
+            final isOrderAccepted = donation['isOrderAccepted'] ?? false;
+
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 5,
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(16.0),
+                title: Text(
+                  foodName,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  'For $count individuals\nAvailable until $timeAvailable\n'
+                  'Delivered: ${isDelivered ? 'Yes' : 'No'}\nOrder Accepted: ${isOrderAccepted ? 'Yes' : 'No'}',
+                  style: TextStyle(color: Colors.green.shade700),
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

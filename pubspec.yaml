@@ -23,6 +23,7 @@ dependencies:
   intl: ^0.20.1
   particles_fly: ^0.0.9
   flutter_rating_bar: ^4.0.1
+ 
   
 
 dev_dependencies:

@@ -1,32 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+
+
 class RecentOrdersScreen extends StatelessWidget {
   const RecentOrdersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // Number of tabs
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Recent Orders'),
-          backgroundColor: Colors.blueAccent,
+          title: const Text(
+            'Recent Orders',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: Colors.teal,
           bottom: const TabBar(
+            indicatorColor: Colors.orange,
+            labelStyle: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white60,
             tabs: [
-              Tab(text: 'Accepted Orders'),
-              Tab(text: 'Delivered Orders'),
+              Tab(icon: Icon(Icons.check_circle_outline, color: Colors.white), text: 'Accepted Orders'),
+              Tab(icon: Icon(Icons.receipt_long, color: Colors.white), text: 'Received Orders'),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            // Accepted Orders Tab (Filter by isOrderAccepted == true AND isDelivered == false)
+            // Accepted Orders Tab
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('foods')
-                  .where('isOrderAccepted', isEqualTo: true) // Filter for accepted orders
-                  .where('isDelivered', isEqualTo: false) // Ensure it's not delivered yet
+                  .collection('orders')
+                  .where('isOrderAccepted', isEqualTo: true)
+                  .where('isRecived', isEqualTo: false)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,7 +54,12 @@ class RecentOrdersScreen extends StatelessWidget {
 
                 var documents = snapshot.data!.docs;
                 if (documents.isEmpty) {
-                  return const Center(child: Text('No accepted orders.'));
+                  return const Center(
+                    child: Text(
+                      'No accepted orders.',
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                  );
                 }
 
                 return ListView.builder(
@@ -46,25 +67,27 @@ class RecentOrdersScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var data = documents[index];
                     return OrderCard(
+                     isOrderAccepted: data['isOrderAccepted'],
                       docId: data.id,
-                      restaurantName: data['resid'],
-                      foodName: data['foodName'],
-                      place: 'Unknown Place', // Replace with actual place if available
+                      
+                      foodId: data['foodId'],
+                     
                       quantity: data['count'],
-                      availableUntil: data['availableUntil'],
-                      createdAt: (data['createdAt'] as Timestamp).toDate(),
-                      isDelivered: data['isDelivered'],
+                      orpId: data['orpId'],
+
+                     
+                      isReceived: data['isRecived'],
                     );
                   },
                 );
               },
             ),
 
-            // Delivered Orders Tab (Filter by isDelivered == true)
+            // Received Orders Tab
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('foods')
-                  .where('isDelivered', isEqualTo: true) // Filter for delivered orders
+                  .collection('orders')
+                  .where('isRecived', isEqualTo: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -76,7 +99,12 @@ class RecentOrdersScreen extends StatelessWidget {
 
                 var documents = snapshot.data!.docs;
                 if (documents.isEmpty) {
-                  return const Center(child: Text('No delivered orders.'));
+                  return const Center(
+                    child: Text(
+                      'No received orders.',
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                  );
                 }
 
                 return ListView.builder(
@@ -84,14 +112,16 @@ class RecentOrdersScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var data = documents[index];
                     return OrderCard(
+                      isOrderAccepted: data['isOrderAccepted'],
                       docId: data.id,
-                      restaurantName: data['resid'],
-                      foodName: data['foodName'],
-                      place: 'Unknown Place', // Replace with actual place if available
+                      
+                      foodId: data['foodId'],
+                     
                       quantity: data['count'],
-                      availableUntil: data['availableUntil'],
-                      createdAt: (data['createdAt'] as Timestamp).toDate(),
-                      isDelivered: data['isDelivered'],
+                      orpId: data['orpId'],
+
+                     
+                      isReceived: data['isRecived'],
                     );
                   },
                 );
@@ -106,121 +136,267 @@ class RecentOrdersScreen extends StatelessWidget {
 
 class OrderCard extends StatelessWidget {
   final String docId;
-  final String restaurantName;
-  final String foodName;
-  final String place;
+  final String foodId;
+
   final int quantity;
-  final String availableUntil;
-  final DateTime createdAt;
-  final bool isDelivered;
+  final String orpId;
+
+  final bool isReceived;
+  final bool isOrderAccepted;
 
   const OrderCard({
     super.key,
     required this.docId,
-    required this.restaurantName,
-    required this.foodName,
-    required this.place,
+    required this.foodId,
+    required this.orpId,
     required this.quantity,
-    required this.availableUntil,
-    required this.createdAt,
-    required this.isDelivered,
+    required this.isOrderAccepted,
+    required this.isReceived
+   
   });
 
-  // Function to update the 'isDelivered' field in Firestore
-  Future<void> updateIsDelivered() async {
-    await FirebaseFirestore.instance.collection('foods').doc(docId).update({
-      'isDelivered': true, // Set 'isDelivered' to true
+
+  // Update the 'isDelivered' field in the 'orders' collection
+  Future<void> updateIsReceived() async {
+    await FirebaseFirestore.instance.collection('orders').doc(docId).update({
+      'isRecived': true,
     });
   }
 
+
+
+  Future<Map<String, dynamic>> fetchFoodDetails(String foodId) async {
+  try {
+    print(foodId);
+    var doc = await FirebaseFirestore.instance.collection('foods').doc(foodId).get();
+    print(doc.exists);
+
+    if (doc.exists) {
+     
+
+      // Fetch restaurant details using resId from the food document
+      String resId = doc['resid']; // Get the restaurant ID from the food document
+      var restaurantDoc = await FirebaseFirestore.instance.collection('restaurants').doc(resId).get();
+     
+      if (restaurantDoc.exists) {
+        print(restaurantDoc.data());
+        return {
+          'foodName': doc['foodName'] ?? 'Unknown Food',
+          'availableUntil': doc['availableUntil'] ?? 'Unknown Time',
+          'resId': resId,
+          'resName': restaurantDoc['name'] ?? 'Unknown Restaurant',
+          'resDescription': restaurantDoc['description'] ?? 'No description available',
+          'resEmail': restaurantDoc['email'] ?? 'No email provided',
+          'resImageUrl': restaurantDoc['imageUrl'] ?? '', // URL for restaurant image
+          'resPhoneNumber': restaurantDoc['phoneNumber'] ?? 'No phone number provided',
+          'resPlace': restaurantDoc['place'] ?? 'Unknown Location',
+        };
+      } else {
+        return {
+          'foodName': doc['foodName'] ?? 'Unknown Food',
+          'availableUntil': doc['availableUntil'] ?? 'Unknown Time',
+          'resId': resId,
+          'resName': 'Unknown Restaurant',
+          'resDescription': 'No description available',
+          'resEmail': 'No email provided',
+          'resImageUrl': '',
+          'resPhoneNumber': 'No phone number provided',
+          'resPlace': 'Unknown Location',
+        };
+      }
+    } else {
+      return {
+        'foodName': 'Unknown Food',
+        'availableUntil': 'Unknown Time',
+        'resId': '',
+        'resName': 'Unknown Restaurant',
+        'resDescription': 'No description available',
+        'resEmail': 'No email provided',
+        'resImageUrl': '',
+        'resPhoneNumber': 'No phone number provided',
+        'resPlace': 'Unknown Location',
+      };
+    }
+  } catch (e) {
+    return {
+      'foodName': 'Unknown Food',
+      'availableUntil': 'Unknown Time',
+      'resId': '',
+      'resName': 'Unknown Restaurant',
+      'resDescription': 'No description available',
+      'resEmail': 'No email provided',
+      'resImageUrl': '',
+      'resPhoneNumber': 'No phone number provided',
+      'resPlace': 'Unknown Location',
+    };
+  }
+}
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3.0,
-      margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 20),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Restaurant Name (or ID)
-            Text(
-              'Restaurant ID: $restaurantName',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8.0),
+    return FutureBuilder<Map<String, dynamic>>(
+      future: fetchFoodDetails(foodId),
+      builder: (context, snapshot) {
 
-            // Place (You may need to adjust this if actual place info is available)
-            Row(
+
+       if(snapshot.hasData){
+
+         print(snapshot.data);
+        String foodName = snapshot.connectionState == ConnectionState.waiting
+            ? 'Loading...'
+            : snapshot.data?['foodName'] ?? 'Unknown Food';
+        String availableUntil = snapshot.connectionState == ConnectionState.waiting
+            ? 'Loading...'
+            : snapshot.data?['availableUntil'] ?? 'Unknown Time';
+        
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          elevation: 8.0,
+          margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.location_on, color: Colors.red),
-                const SizedBox(width: 8.0),
-                Text(
-                  place,
-                  style: const TextStyle(fontSize: 16),
+                // Restaurant Name and Date
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                        snapshot.data?['resName']??'name', // Replace with actual restaurant name if needed
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.teal,
+                      ),
+                    ),
+                    // Text(
+                    //   '${createdAt.toLocal().day}/${createdAt.toLocal().month}/${createdAt.toLocal().year}',
+                    //   style: const TextStyle(
+                    //     fontSize: 14,
+                    //     color: Colors.grey,
+                    //   ),
+                    // ),
+                  ],
                 ),
+                const Divider(color: Colors.grey, thickness: 0.5),
+                const SizedBox(height: 8.0),
+
+                // Place Information
+                Row(
+                  children: [
+                    const Icon(Icons.location_on, color: Colors.orange, size: 20),
+                    const SizedBox(width: 8.0),
+                    Text(
+                      snapshot.data!['resPlace']??'place',
+                      style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12.0),
+
+                // Food Name and Quantity
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Food: $foodName',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade100,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Text(
+                        'Qty: $quantity',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8.0),
+
+                // Available Until
+                Text(
+                  'Available Until: $availableUntil',
+                  style: const TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 8.0),
+
+               
+                
+                const SizedBox(height: 16.0),
+
+                // Actions
+                if (!isReceived)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24.0),
+                      ),
+                      onPressed: () async {
+                        await updateIsReceived();
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Icon(Icons.check, color: Colors.white, size: 18),
+                          SizedBox(width: 8.0),
+                          Text(
+                            'Mark as Received',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (isReceived)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade100,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: const Text(
+                        'Order Received',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
-            const SizedBox(height: 8.0),
+          ),
+        );
+     
+       }
 
-            // Food Item Name
-            Text(
-              'Food Name: $foodName',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8.0),
-
-            // Quantity
-            Text(
-              'Quantity: $quantity',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8.0),
-
-            // Available Until Time
-            Text(
-              'Available Until: $availableUntil',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8.0),
-
-            // Created At Time
-            Row(
-              children: [
-                const Icon(Icons.access_time, color: Colors.grey),
-                const SizedBox(width: 8.0),
-                Text(
-                  'Created At: ${createdAt.toLocal().day}/${createdAt.toLocal().month}',
-                  style: const TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 16.0),
-
-            // Button to mark as Delivered
-            if (!isDelivered) // Only show the button if not delivered yet
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green
-
-                ),
-                onPressed: () {
-                  updateIsDelivered();
-                },
-                child: const Text('Mark as Delivered'),
-              ),
-            if (isDelivered)
-              const Text(
-                'Delivered',
-                style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
-              ),
-          ],
-        ),
-      ),
+       return Center(
+        child: SizedBox()
+       );
+     
+      },
     );
   }
 }
