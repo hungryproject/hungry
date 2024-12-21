@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Import for User type
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hungry/modules/restuarant/screens/bottomnavigation_screen.dart';
 import 'package:hungry/modules/restuarant/screens/signup_screen.dart';
 import 'package:hungry/utils/helper.dart';
@@ -11,12 +11,44 @@ class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-class _LoginScreenState extends State<LoginScreen> {
+
+class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuthService _authService = FirebaseAuthService();
   bool _isLoading = false; // State to track loading status
+
+  // Animation controller for fade and scale animations
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize the animation controller
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
+    ));
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+
+    _animationController.forward();
+  }
 
   Future<void> _login() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -30,8 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         User? user = await _authService.signInWithEmailAndPassword(email, password);
 
-        await Helper().sendNotificationToDevice('dcc7b081-eae7-4ca3-b3b0-d90fc57a2ef5','title','body');
-        
+        await Helper().sendNotificationToDevice(
+            'dcc7b081-eae7-4ca3-b3b0-d90fc57a2ef5', 'title', 'body');
+
         setState(() {
           _isLoading = false; // Hide loading indicator
         });
@@ -66,96 +99,131 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    _animationController.dispose(); // Dispose of animation controller
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Color.fromARGB(255, 250, 240, 215), // Light, warm background color (restaurant theme)
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          // Background Image
-          Image.asset(
-            'asset/images/jhgf.jpg', // Replace with your image path
-            fit: BoxFit.cover,
-          ),
-          // Login Form
+          // Login Form with Animation
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
+            child: FadeTransition(
+              opacity: _fadeAnimation,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  const CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage('asset/images/restu.jpg'),
+                  // Animated Logo with Scale Effect (like a restaurant icon)
+                  ScaleTransition(
+                    scale: _fadeAnimation,
+                    child: const CircleAvatar(
+                      radius: 80,
+                      backgroundColor: Color.fromARGB(255, 248, 157, 48), // Warm orange color
+                      child: Icon(Icons.fastfood, size: 60, color: Colors.white),
+                    ),
                   ),
+                  const SizedBox(height: 24.0),
                   const Text(
                     'Login',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 59, 100, 12),
+                      color: Color.fromARGB(255, 59, 100, 12), // Restaurant-themed green
+                    ),
+                  ),
+                  const SizedBox(height: 24.0),
+                  // Username Field with Slide Animation
+                  SlideTransition(
+                    position: _slideAnimation,
+                    child: TextFormField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        labelStyle: TextStyle(color: Color.fromARGB(255, 67, 122, 42)), // Restaurant green
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color.fromARGB(179, 56, 189, 98), // Light green background
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color.fromARGB(255, 56, 189, 98)),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  // Password Field with Slide Animation
+                  SlideTransition(
+                    position: _slideAnimation,
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: TextStyle(color: Color.fromARGB(255, 67, 122, 42)), // Restaurant green
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color.fromARGB(179, 66, 167, 60), // Dark green background
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color.fromARGB(255, 66, 167, 60)),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(height: 32.0),
-                  // Username Field
-                  TextFormField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Color.fromARGB(179, 56, 189, 98),
+                  // Login Button with Fade Animation
+                  FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _login, // Disable button if loading
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 56, 189, 98), // Restaurant green
+                        padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 60.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            )
+                          : const Text('Login', style: TextStyle(fontSize: 16)),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 16.0),
-                  // Password Field
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Color.fromARGB(179, 66, 167, 60),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 32.0),
-                  // Login Button
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _login, // Disable button if loading
-                    child: _isLoading
-                        ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white), // Loading indicator color
-                          )
-                        : const Text('Login'),
-                  ),
-                  const SizedBox(height: 16.0),
-                  // Create Account Button
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SignupScreen()),
-                      );
-                    },
-                    child: const Text(
-                      'Create Account',
-                      style: TextStyle(color: Color.fromARGB(255, 56, 175, 67)),
+                  // Create Account Button with Slide Animation
+                  SlideTransition(
+                    position: _slideAnimation,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SignupScreen()),
+                        );
+                      },
+                      child: const Text(
+                        'Create Account',
+                        style: TextStyle(color: Color.fromARGB(255, 56, 175, 67)),
+                      ),
                     ),
                   ),
                 ],

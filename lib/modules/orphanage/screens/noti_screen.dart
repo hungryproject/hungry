@@ -19,7 +19,7 @@ class OrphanageOrderService {
         await _firestore.collection('orders').add({
           'foodId' : docId,
           'orpId' : FirebaseAuth.instance.currentUser?.uid,
-          'count': orderQty,
+          'ordercount': orderQty,
           'isOrderAccepted': true, // Mark order as accepted
           'isRecived' : false,
         });
@@ -27,7 +27,7 @@ class OrphanageOrderService {
         // Step 5: Decrement the food stock by the order quantity
         await _firestore.collection('foods').doc(docId).update({
           'count': currentStock - orderQty, // Decrement the stock
-          
+          'orpId' : FirebaseAuth.instance.currentUser?.uid,
         });
 
         print('Order $orderId accepted and stock updated successfully.');
@@ -77,6 +77,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           }
 
           var documents = snapshot.data!.docs;
+          
 
           // No data state
           if (documents.isEmpty) {
@@ -87,10 +88,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
               ),
             );
           }
-
+          
           // Create an instance of OrphanageOrderService
           final orderService = OrphanageOrderService();
-
+         
           return RefreshIndicator(
             onRefresh: () async {
               setState(() {});

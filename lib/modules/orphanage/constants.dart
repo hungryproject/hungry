@@ -1,0 +1,1 @@
+int unreadCount = 0;
