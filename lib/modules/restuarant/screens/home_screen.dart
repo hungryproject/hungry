@@ -107,18 +107,17 @@ class RestaurantHomeScreen extends StatelessWidget {
                         margin: const EdgeInsets.only(right: 16),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => OrphanageDetailScreen(
-                                  
-                                  location: orphanage['place'] ?? '',
-                                  manager: orphanage['orphanageName'] ?? '',
-                                  phone: orphanage['phoneNumber'] ?? '',
-                                  image: orphanage['licensePhotoUrl'] ?? '',
-                                ),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => OrphanageDetailScreen(
+                            //       location: orphanage['place'] ?? '',
+                            //       manager: orphanage['orphanageName'] ?? '',
+                            //       phone: orphanage['phoneNumber'] ?? '',
+                            //       image: orphanage['licensePhotoUrl'] ?? '',
+                            //     ),
+                            //   ),
+                            // );
                           },
                           child: Card(
                             color: Colors.white,

@@ -51,7 +51,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   }
 
   Future<void> _login() async {
-    if (_formKey.currentState?.validate() ?? false) {
+    print('hhhh');
+    if (_usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+      print('hhhh');
       setState(() {
         _isLoading = true; // Show loading indicator
       });
@@ -61,6 +63,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
       try {
         User? user = await _authService.signInWithEmailAndPassword(email, password);
+
+        print('hi');
 
         await Helper().sendNotificationToDevice(
             'dcc7b081-eae7-4ca3-b3b0-d90fc57a2ef5', 'title', 'body');

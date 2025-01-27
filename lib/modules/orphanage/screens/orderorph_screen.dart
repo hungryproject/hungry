@@ -72,7 +72,7 @@ class RecentOrdersScreen extends StatelessWidget {
                       
                       foodId: data['foodId'],
                      
-                      quantity: data['count'],
+                      quantity: data['ordercount'],
                       orpId: data['orpId'],
 
                      
@@ -117,7 +117,7 @@ class RecentOrdersScreen extends StatelessWidget {
                       
                       foodId: data['foodId'],
                      
-                      quantity: data['count'],
+                      quantity: data['ordercount'],
                       orpId: data['orpId'],
 
                      

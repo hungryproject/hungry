@@ -212,13 +212,13 @@ class NotificationCard extends StatelessWidget {
                     color: Colors.green.shade600,
                   ),
                 ),
-                Text(
-                  'Qty: $quantity',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.green.shade600,
-                  ),
-                ),
+                // Text(
+                //   'Qty: $quantity',
+                //   style: TextStyle(
+                //     fontSize: 16,
+                //     color: Colors.green.shade600,
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 8),

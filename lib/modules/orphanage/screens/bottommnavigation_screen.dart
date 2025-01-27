@@ -3,7 +3,6 @@ import 'package:hungry/modules/orphanage/screens/home_screen.dart';
 import 'package:hungry/modules/orphanage/screens/noti_screen.dart';
 import 'package:hungry/modules/orphanage/screens/orderorph_screen.dart';
 import 'package:hungry/modules/orphanage/screens/proffileorph_screen.dart';
-import 'package:hungry/modules/restuarant/screens/home_screen.dart';
 
 
 class OrphnageRootScreen extends StatefulWidget {

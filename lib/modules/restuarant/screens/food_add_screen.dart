@@ -201,63 +201,136 @@ class _FoodFormPageState extends State<FoodFormPage> {
   }
 
   Widget _buildRecentDonationsList() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: _firestore
-          .collection('foods')
-          .orderBy('createdAt', descending: true) // Order by creation time, descending
-          .limit(5) // Limit to 5 recent donations
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+  return StreamBuilder<QuerySnapshot>(
+    stream: _firestore
+        .collection('foods')
+        .orderBy('createdAt', descending: true)
+        .limit(5)
+        .snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-        if (snapshot.hasError) {
-          return const Center(child: Text('Something went wrong.'));
-        }
+      if (snapshot.hasError) {
+        return const Center(child: Text('Something went wrong.'));
+      }
 
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(child: Text('No recent donations.'));
-        }
+      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        return const Center(child: Text('No recent donations.'));
+      }
 
-        final donations = snapshot.data!.docs;
+      final donations = snapshot.data!.docs;
 
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: donations.length,
-          itemBuilder: (context, index) {
-            final donation = donations[index];
-            final foodName = donation['foodName'] ?? 'Unknown Food';
-            final count = donation['count'] ?? 0;
-            final timeAvailable = donation['availableUntil'] ?? 'Unknown Time';
-            final isDelivered = donation['isDelivered'] ?? false;
-            final isOrderAccepted = donation['isOrderAccepted'] ?? false;
+      return ListView.separated(
+        separatorBuilder: (context, index) => const Divider(
+          thickness: 1,
+          color: Colors.grey,
+          indent: 20,
+          endIndent: 20,
+        ),
+        shrinkWrap: true,
+        itemCount: donations.length,
+        itemBuilder: (context, index) {
+          final donation = donations[index];
+          final foodName = donation['foodName'] ?? 'Unknown Food';
+          final count = donation['count'] ?? 0;
+          final timeAvailable = donation['availableUntil'] ?? 'Unknown Time';
+          final isDelivered = donation['isDelivered'] ?? false;
+          final isOrderAccepted = donation['isOrderAccepted'] ?? false;
 
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 5,
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(16.0),
-                title: Text(
-                  foodName,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.fastfood,
+                        color: Colors.orange,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          foodName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                subtitle: Text(
-                  'For $count individuals\nAvailable until $timeAvailable\n'
-                  'Delivered: ${isDelivered ? 'Yes' : 'No'}\nOrder Accepted: ${isOrderAccepted ? 'Yes' : 'No'}',
-                  style: TextStyle(color: Colors.green.shade700),
-                ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.group, size: 20, color: Colors.blue),
+                      const SizedBox(width: 8),
+                      Text(
+                        'For $count individuals',
+                        style: const TextStyle(fontSize: 14, color: Colors.black87),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.schedule, size: 20, color: Colors.teal),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Available until $timeAvailable',
+                        style: const TextStyle(fontSize: 14, color: Colors.black87),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.check_circle,
+                        size: 20,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Delivered: ${isDelivered ? 'Yes' : 'No'}',
+                        style: const TextStyle(fontSize: 14, color: Colors.black87),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.check_box,
+                        size: 20,
+                        color: Colors.purple,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Order Accepted: ${isOrderAccepted ? 'Yes' : 'No'}',
+                        style: const TextStyle(fontSize: 14, color: Colors.black87),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            );
-          },
-        );
-      },
-    );
-  }
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
+
+
 }
