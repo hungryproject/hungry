@@ -58,7 +58,7 @@ class _ProfileOrphanageState extends State<ProfileOrphanage> {
             },
             child: const Text(
               'Log Out',
-              style: TextStyle(color: Colors.redAccent),
+              style: TextStyle(color: Color.fromARGB(177, 1, 170, 153)),
             ),
           ),
         ],
@@ -199,7 +199,7 @@ class _ProfileOrphanageState extends State<ProfileOrphanage> {
                               label: const Text('Edit Details'),
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
-                                backgroundColor: Colors.teal,
+                                backgroundColor: const Color.fromARGB(255, 11, 169, 172),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -214,7 +214,7 @@ class _ProfileOrphanageState extends State<ProfileOrphanage> {
                               label: const Text('Log Out'),
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
-                                backgroundColor: Colors.redAccent,
+                                backgroundColor: const Color.fromARGB(255, 11, 169, 172),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -225,6 +225,36 @@ class _ProfileOrphanageState extends State<ProfileOrphanage> {
                       ),
                     ),
                   ),
+
+                  if (data['licensePhotoUrl'] != null)
+                    Card(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'License Photo:',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Image.network(
+                              data['licensePhotoUrl'],
+                              height: 150,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

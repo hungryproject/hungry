@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:hungry/modules/restuarant/service/firestorage_serviece.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -70,19 +71,13 @@ class _EditOrphanageDetailsScreenState
     }
 
     try {
-      // Update Firestore details
       final orphanageRef =
           FirebaseFirestore.instance.collection('orphanages').doc(userId);
 
-      // Upload image to Firebase Storage (if selected)
       String? imageUrl;
       if (_image != null) {
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child('orphanage_images')
-            .child('$userId.jpg');
-        await storageRef.putFile(_image!);
-        imageUrl = await storageRef.getDownloadURL();
+         imageUrl = await StorageService().uploadImage(_image!);
+        
       }
 
       await orphanageRef.update({
@@ -91,10 +86,10 @@ class _EditOrphanageDetailsScreenState
         'email': _emailController.text,
         'phoneNumber': _phoneController.text,
         'members': int.tryParse(_membersController.text) ?? 0,
-        if (imageUrl != null) 'imageUrl': imageUrl, // Add image URL if uploaded
+
+        if (imageUrl != null) 'licensePhotoUrl': imageUrl,
       });
 
-      // Update password if provided
       if (_passwordController.text.isNotEmpty) {
         await FirebaseAuth.instance.currentUser
             ?.updatePassword(_passwordController.text);
@@ -155,7 +150,6 @@ class _EditOrphanageDetailsScreenState
                     decoration: const InputDecoration(labelText: 'Number of Members'),
                     keyboardType: TextInputType.number,
                   ),
-                 
                   const SizedBox(height: 16.0),
                   if (_image != null)
                     Image.file(
@@ -163,10 +157,17 @@ class _EditOrphanageDetailsScreenState
                       height: 150,
                       fit: BoxFit.cover,
                     ),
+                  if (_image == null)
+                    const Text('No image selected'),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: _pickImage,
+                    child: const Text('Select Image'),
+                  ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: _saveChanges,
-                    child: const Text('Save Changes',style: TextStyle(color: Colors.white),),
+                    child: const Text('Save Changes', style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
                   ),
                 ],

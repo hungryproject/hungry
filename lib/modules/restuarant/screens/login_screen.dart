@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hungry/modules/restuarant/screens/bottomnavigation_screen.dart';
 import 'package:hungry/modules/restuarant/screens/signup_screen.dart';
 import 'package:hungry/utils/helper.dart';
+import 'package:lottie/lottie.dart';
 import '../service/firebase_auth_services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -127,14 +128,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   // Animated Logo with Scale Effect (like a restaurant icon)
-                  ScaleTransition(
-                    scale: _fadeAnimation,
-                    child: const CircleAvatar(
-                      radius: 80,
-                      backgroundColor: Color.fromARGB(255, 248, 157, 48), // Warm orange color
-                      child: Icon(Icons.fastfood, size: 60, color: Colors.white),
+                  CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 130,
+                      child: Lottie.asset(
+                        'asset/Animation - 1740117667865.json',
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
                   const SizedBox(height: 24.0),
                   const Text(
                     'Login',

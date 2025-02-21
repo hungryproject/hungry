@@ -16,7 +16,7 @@ class RestaurantHomeScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 60),
             const Text(
-              'Lend a hand, give a can',
+              'Share food,spread smiles!',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

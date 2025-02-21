@@ -69,7 +69,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 150, 198, 192),
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -83,9 +83,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 children: <Widget>[
                   CircleAvatar(
                     backgroundColor: Colors.white,
-                    radius: 80,
+                    radius: 130,
                     child: Lottie.asset(
-                      'asset/Animation - 1728213854723.json', // Replace with your image path
+                      'asset/Animation - 1740118815659.json', // Replace with your image path
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -94,7 +94,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 59, 100, 12),
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 32.0),
@@ -105,7 +105,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       labelText: 'Email',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color.fromARGB(179, 56, 189, 98),
+                      fillColor: Color.fromARGB(255, 249, 251, 251),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -123,7 +123,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Color.fromARGB(179, 66, 167, 60),
+                      fillColor: Color.fromARGB(255, 239, 240, 239),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -137,12 +137,15 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                   ElevatedButton(
                     onPressed:
                         _isLoading ? null : _login, // Disable button if loading
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(136, 14, 133, 103),
+                    ),
                     child: _isLoading
                         ? const CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.white), // Loading indicator color
                           )
-                        : const Text('Login'),
+                        : const Text('Login', style: TextStyle(color: Colors.white)),
                   ),
                   const SizedBox(height: 16.0),
                 ],

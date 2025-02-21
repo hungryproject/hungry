@@ -46,19 +46,7 @@ class _OrphnageRootScreenState extends State<OrphnageRootScreen> {
             icon: Stack(
               children:[ 
                 Icon(Icons.notifications),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  child: CircleAvatar(
-                    radius: 6,
-                    backgroundColor: Colors.red,
-                    child: Text('10',style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 5,
-                      fontWeight: FontWeight.bold
-                    ),),
-                  ),
-                )
+               
                 ]),
             label: 'Notifications',
           ),

@@ -53,7 +53,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pending Orders'),
-        backgroundColor: Colors.green.shade700,
+        backgroundColor: const Color.fromARGB(255, 11, 129, 123),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -155,7 +155,7 @@ class NotificationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      shadowColor: Colors.green.shade500.withOpacity(0.5),
+      shadowColor: const Color.fromARGB(255, 11, 147, 131).withOpacity(0.5),
       color: isOrderExpired ? Colors.grey.shade300 : Colors.white, // Disabled look
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -183,7 +183,7 @@ class NotificationCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.green.shade700,
+                          color: const Color.fromARGB(255, 10, 176, 151),
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -191,7 +191,7 @@ class NotificationCard extends StatelessWidget {
                         resData['place'] ?? 'Unknown Place',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.green.shade500,
+                          color: const Color.fromARGB(255, 18, 204, 154),
                         ),
                       ),
                     ],
@@ -209,7 +209,7 @@ class NotificationCard extends StatelessWidget {
                   'Food: $foodItem',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.green.shade600,
+                    color: const Color.fromARGB(255, 22, 206, 197),
                   ),
                 ),
                 // Text(
@@ -226,7 +226,7 @@ class NotificationCard extends StatelessWidget {
               'Available Until: $availableUntil',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.green.shade600,
+                color: const Color.fromARGB(255, 13, 163, 163),
               ),
             ),
             if (currentTime.isBefore(availableUntilTime)) ...[ 
@@ -235,7 +235,7 @@ class NotificationCard extends StatelessWidget {
                 'Current Time: ${TimeOfDay.fromDateTime(currentTime).format(context)}',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.green.shade700,
+                  color: const Color.fromARGB(255, 16, 198, 159),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -303,7 +303,7 @@ class NotificationCard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isOrderExpired
                         ? Colors.grey.shade500 // Disabled color
-                        : Colors.green.shade800,
+                        : const Color.fromARGB(255, 14, 203, 190),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -317,7 +317,7 @@ class NotificationCard extends StatelessWidget {
                     isOrderExpired ? 'Expired' : 'Accept', // Update text if expired
                     style: TextStyle(
                       color: isOrderExpired
-                          ? Colors.grey.shade700 // Disabled text color
+                          ? const Color.fromARGB(255, 29, 186, 173) // Disabled text color
                           : Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,

@@ -15,11 +15,11 @@ class AdminPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 7, 95, 95),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromARGB(0, 14, 153, 120),
         elevation: 0,
         centerTitle: true,
         title: const Text(
@@ -32,7 +32,7 @@ class AdminPage extends StatelessWidget {
         padding: const EdgeInsets.only(top: 150),
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('asset/images/bg-ch.jpg'),
+            image: AssetImage('asset/IMG_5239.jpeg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -41,7 +41,7 @@ class AdminPage extends StatelessWidget {
             AdminCard(
               icon: Icons.restaurant,
               title: 'Restaurant',
-              backgroundColor: Colors.white,
+              backgroundColor: const Color.fromARGB(255, 246, 246, 246),
               onTap: () {
                 Navigator.push(
                   context,
@@ -185,6 +185,7 @@ class AdminCard extends StatelessWidget {
                 title,
                 style: const TextStyle(
                   fontSize: 20,
+                  color:Color.fromARGB(169, 9, 103, 110),
                   fontWeight: FontWeight.bold,
                                 ),
               ),
