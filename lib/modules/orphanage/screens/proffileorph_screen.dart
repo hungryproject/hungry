@@ -238,7 +238,7 @@ class _ProfileOrphanageState extends State<ProfileOrphanage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'License Photo:',
+                              'Orphanage Photo:',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
